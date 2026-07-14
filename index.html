@@ -73,7 +73,7 @@
         /* Legendă */
         .legend { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem; border-top: 1px solid #1e293b; padding-top: 15px; }
         .legend-item { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-weight: 500; }
-        .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+        .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
         /* Fereastră Selecție (Modal Complex) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; }
@@ -118,11 +118,13 @@
         body.generating-pdf .stat-sub { color: #475569 !important; }
 
         body.generating-pdf .header { color: #475569 !important; }
-        body.generating-pdf .day { border: 1px solid #e2e8f0 !important; color: white !important; font-size: 0.85rem; padding: 10px 0; }
+        body.generating-pdf .day { border: 1px solid #e2e8f0 !important; color: white !important; font-size: 0.85rem; padding: 10px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
-        body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; }
-        body.generating-pdf .legend { border-top: 1px solid #cbd5e1 !important; margin-top: 25px; }
-        body.generating-pdf .legend-item { color: #334155 !important; }
+        body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        /* Setări Legenda pentru PDF */
+        body.generating-pdf .legend { border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; display: grid !important; }
+        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; }
 
         /* Stil Notițe în PDF */
         body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
@@ -210,10 +212,7 @@
     <!-- Grila Calendar -->
     <div class="calendar-grid" id="calendar"></div>
 
-    <!-- Container Notițe PDF (Ascuns în web, vizibil doar pe PDF) -->
-    <div id="pdfNotesContainer" class="pdf-notes-section" style="display:none;"></div>
-
-    <!-- Legendă Dinamică -->
+    <!-- Legendă Dinamică (mutată deasupra notițelor pentru a asigura randarea corectă în PDF) -->
     <div class="legend" id="legendContainer">
         <div class="legend-item" data-shift="L"><div class="box" style="background:#007bff"></div> Liber</div>
         <div class="legend-item" data-shift="S1"><div class="box" style="background:#28a745"></div> Schimb 1</div>
@@ -222,6 +221,9 @@
         <div class="legend-item" data-shift="12D"><div class="box" style="background:#dc3545"></div> 12h Dimineață</div>
         <div class="legend-item" data-shift="12N"><div class="box" style="background:#e83e8c"></div> 12h Noapte</div>
     </div>
+
+    <!-- Container Notițe PDF (Ascuns în web, vizibil doar pe PDF) -->
+    <div id="pdfNotesContainer" class="pdf-notes-section" style="display:none;"></div>
 
     <!-- Modal Avansat (Ture + Notițe) -->
     <div class="modal-overlay" id="shiftModal" onclick="inchideModal()">
@@ -475,23 +477,26 @@
         
         function descargaPdf() {
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
-            document.getElementById('titluPdf').innerText = `Program Ture • ${numeLuna}`;
+            document.getElementById('titluPdf').innerText = `Program Ture Simplificat • ${numeLuna}`;
+            
+            // Activăm clasa pentru styling de PDF și afișăm notițele temporar
             document.body.classList.add('generating-pdf');
-            document.getElementById('pdfNotesContainer').style.display = 'block'; // Asigură afișarea notițelor
+            document.getElementById('pdfNotesContainer').style.display = 'block';
             
             const element = document.body;
             const opt = {
-                margin:       0,
+                margin:       [10, 10, 10, 10], // Margin adăugat ca să nu taie colțurile
                 filename:     `Grafic_Ture_${numeLuna.replace(' ', '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
+                image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
             html2pdf().set(opt).from(element).save().then(() => {
+                // Revertim schimbările după salvare
                 document.body.classList.remove('generating-pdf');
-                document.getElementById('pdfNotesContainer').style.display = 'none'; // Le ascunde la loc
-                showToast("📄 PDF descărcat cu succes în folderul Downloads!");
+                document.getElementById('pdfNotesContainer').style.display = 'none';
+                showToast("📄 PDF descărcat cu succes!");
             });
         }
 
