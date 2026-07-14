@@ -85,6 +85,7 @@
         
         /* Secțiune Notițe în Modal */
         .modal-notes-section { border-top: 1px solid #1e293b; padding-top: 12px; margin-top: 12px; }
+        .extra-hours-input { width: 100%; background: #050505; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; color: #fbbf24; font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; }
         .notes-label { font-size: 0.72rem; color: #64748b; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 6px; text-align: left; }
         .notes-input { width: 100%; background: #050505; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; color: white; font-family: inherit; font-size: 0.85rem; resize: none; min-height: 45px; }
         .notes-input:focus { border-color: #3b82f6; outline: none; }
@@ -122,6 +123,11 @@
         body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; }
         body.generating-pdf .legend { border-top: 1px solid #cbd5e1 !important; margin-top: 25px; }
         body.generating-pdf .legend-item { color: #334155 !important; }
+
+        /* Stil Notițe în PDF */
+        body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
+        body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
+        body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
     </style>
 </head>
 <body>
@@ -152,7 +158,7 @@
             </div>
             <div class="custom-option" onclick="selecteazaProfilCustom('p2')" id="opt-p2">
                 <div class="opt-title">Luni - Vineri (Doar Schimbul 1)</div>
-                <div class="opt-desc">Program fix de dimineață (8h). Sâmbăta și duminica sunt întotdeaute libere.</div>
+                <div class="opt-desc">Program fix de dimineață (8h). Sâmbăta și duminica sunt întotdeauna libere.</div>
             </div>
             <div class="custom-option" onclick="selecteazaProfilCustom('p3')" id="opt-p3">
                 <div class="opt-title">3 Schimburi Rotație (Luni - Vineri)</div>
@@ -204,6 +210,9 @@
     <!-- Grila Calendar -->
     <div class="calendar-grid" id="calendar"></div>
 
+    <!-- Container Notițe PDF (Ascuns în web, vizibil doar pe PDF) -->
+    <div id="pdfNotesContainer" class="pdf-notes-section" style="display:none;"></div>
+
     <!-- Legendă Dinamică -->
     <div class="legend" id="legendContainer">
         <div class="legend-item" data-shift="L"><div class="box" style="background:#007bff"></div> Liber</div>
@@ -229,9 +238,12 @@
             </div>
 
             <div class="modal-notes-section">
+                <label class="notes-label">Ore Suplimentare:</label>
+                <input type="number" class="extra-hours-input" id="extraHoursInput" placeholder="ex: 4" min="0" max="12">
+                
                 <label class="notes-label">Notiță / Planificare:</label>
-                <textarea class="notes-input" id="notaText" placeholder="Adaugă un memento (ex: programare, concediu...)"></textarea>
-                <button class="btn-salveaza-nota" onclick="salveazaNotaText()">Salvează Notița</button>
+                <textarea class="notes-input" id="notaText" placeholder="Adaugă un memento..."></textarea>
+                <button class="btn-salveaza-nota" onclick="salveazaDateModal()">Salvează Modificări</button>
             </div>
             
             <button class="opt-btn" style="background:#334155; margin-top:12px; width:100%;" onclick="inchideModal()">Închide</button>
@@ -281,7 +293,10 @@
 
         function genCalendar() {
             const container = document.getElementById('calendar');
+            const pdfNotes = document.getElementById('pdfNotesContainer');
+            
             container.innerHTML = '<div class="day header">Lu</div><div class="day header">Ma</div><div class="day header">Mi</div><div class="day header">Jo</div><div class="day header">Vi</div><div class="day header">Sâ</div><div class="day header">Du</div>';
+            pdfNotes.innerHTML = '<h3>Notițe și Ore Suplimentare:</h3>';
             
             let textLunaAn = dataCurenta.toLocaleDateString('ro-RO', {month: 'long', year: 'numeric'});
             document.getElementById('lunaAn').innerText = textLunaAn;
@@ -296,24 +311,39 @@
 
             let tureFolosite = new Set();
             let oreLucrate = 0, zileMunca = 0, noptiMunca = 0, zileLibere = 0;
+            let areNotiteLunix = false;
 
             for(let i=1; i<=zileLuna; i++) {
                 let curr = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth(), i);
                 let dateStr = `${curr.getFullYear()}-${String(curr.getMonth()+1).padStart(2,'0')}-${String(curr.getDate()).padStart(2,'0')}`;
                 
                 let cod = "";
-                if (exceptiiZile[dateStr] && exceptiiZile[dateStr].tura) {
-                    cod = exceptiiZile[dateStr].tura;
+                let extra = 0;
+                let notaText = "";
+
+                if (exceptiiZile[dateStr]) {
+                    cod = exceptiiZile[dateStr].tura || "";
+                    extra = parseInt(exceptiiZile[dateStr].extra) || 0;
+                    notaText = exceptiiZile[dateStr].nota || "";
                 } else {
                     let diff = Math.floor((curr - startReferinta) / 86400000);
                     let ciclu = ((diff % lenCiclu) + lenCiclu) % lenCiclu;
                     cod = zileCiclu[ciclu];
                 }
                 
+                // Extragerea notițelor pentru PDF
+                if (extra > 0 || notaText) {
+                    areNotiteLunix = true;
+                    let infoExtra = extra > 0 ? `<strong>+${extra}h suplimentare</strong>` : '';
+                    let separare = (extra > 0 && notaText) ? ' | ' : '';
+                    pdfNotes.innerHTML += `<p><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}:</b> ${infoExtra}${separare}${notaText}</p>`;
+                }
+
                 if (cod) tureFolosite.add(cod);
                 
-                let ore = shiftOreVal[cod] || 0;
+                let ore = (shiftOreVal[cod] || 0) + extra;
                 oreLucrate += ore;
+
                 if (ore > 0) zileMunca++;
                 if (cod === "L") zileLibere++;
                 if (cod === "S3" || cod === "12N") noptiMunca++;
@@ -323,6 +353,10 @@
                 let areNota = (exceptiiZile[dateStr] && exceptiiZile[dateStr].nota) ? '<div class="note-indicator"></div>' : '';
                 
                 container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${dateStr}', ${i})">${i}${areNota}</div>`;
+            }
+
+            if(!areNotiteLunix) {
+                pdfNotes.innerHTML += '<p>Nu există notițe sau ore suplimentare planificate în această lună.</p>';
             }
 
             // Calcul Normă (Standard)
@@ -386,7 +420,10 @@
             selectatDataStr = dateStr;
             let componente = dateStr.split('-');
             document.getElementById('modalData').innerText = `Configurare: ${numarZi} ${dataCurenta.toLocaleDateString('ro-RO', {month: 'long'})} ${componente[0]}`;
-            document.getElementById('notaText').value = (exceptiiZile[dateStr] && exceptiiZile[dateStr].nota) ? exceptiiZile[dateStr].nota : "";
+            
+            const data = exceptiiZile[dateStr] || {};
+            document.getElementById('notaText').value = data.nota || "";
+            document.getElementById('extraHoursInput').value = data.extra || "";
 
             let permise = optiuniPermiseProfil[profilCurent] || ["L", "S1", "S2", "S3", "12D", "12N"];
             document.querySelectorAll('.modal-options .opt-btn[data-shift]').forEach(btn => {
@@ -411,20 +448,21 @@
             }
         }
 
-        function salveazaNotaText() {
+        function salveazaDateModal() {
             if (selectatDataStr) {
-                let text = document.getElementById('notaText').value.trim();
                 if (!exceptiiZile[selectatDataStr]) exceptiiZile[selectatDataStr] = {};
-                exceptiiZile[selectatDataStr].nota = text;
                 
-                if (!exceptiiZile[selectatDataStr].tura && !exceptiiZile[selectatDataStr].nota) {
+                exceptiiZile[selectatDataStr].nota = document.getElementById('notaText').value.trim();
+                exceptiiZile[selectatDataStr].extra = document.getElementById('extraHoursInput').value.trim();
+                
+                if (!exceptiiZile[selectatDataStr].tura && !exceptiiZile[selectatDataStr].nota && !exceptiiZile[selectatDataStr].extra) {
                     delete exceptiiZile[selectatDataStr];
                 }
 
                 localStorage.setItem('shift_exceptions_v2', JSON.stringify(exceptiiZile));
                 inchideModal();
                 genCalendar();
-                showToast("📝 Notiță memorată cu succes!");
+                showToast("✅ Modificări salvate!");
             }
         }
 
@@ -437,8 +475,9 @@
         
         function descargaPdf() {
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
-            document.getElementById('titluPdf').innerText = `Program Ture Simplificat • ${numeLuna}`;
+            document.getElementById('titluPdf').innerText = `Program Ture • ${numeLuna}`;
             document.body.classList.add('generating-pdf');
+            document.getElementById('pdfNotesContainer').style.display = 'block'; // Asigură afișarea notițelor
             
             const element = document.body;
             const opt = {
@@ -451,6 +490,7 @@
             
             html2pdf().set(opt).from(element).save().then(() => {
                 document.body.classList.remove('generating-pdf');
+                document.getElementById('pdfNotesContainer').style.display = 'none'; // Le ascunde la loc
                 showToast("📄 PDF descărcat cu succes în folderul Downloads!");
             });
         }
