@@ -97,7 +97,7 @@
         
         .print-title { display: none; }
 
-        /* STIL EXPORT PDF AUTOMAT */
+        /* STIL EXPORT PDF AUTOMAT - REVIZUIT */
         body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
         body.generating-pdf .nav-bar, 
         body.generating-pdf .custom-select-container,
@@ -105,6 +105,17 @@
         body.generating-pdf .toast-notification,
         body.generating-pdf .modal-overlay { display: none !important; }
         
+        /* Forțăm afișarea header-ului */
+        body.generating-pdf .calendar-grid .header { 
+            display: flex !important; 
+            color: #000000 !important; 
+            font-weight: 900 !important; 
+            background: transparent !important; 
+            border: none !important;
+            justify-content: center;
+            align-items: center;
+        }
+
         body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
         body.generating-pdf .brand-logo { box-shadow: none !important; }
         body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; }
@@ -117,10 +128,17 @@
         body.generating-pdf .stat-lbl { color: #64748b !important; }
         body.generating-pdf .stat-sub { color: #475569 !important; }
 
-        body.generating-pdf .header { color: #475569 !important; }
         body.generating-pdf .day { border: 1px solid #e2e8f0 !important; color: white !important; font-size: 0.85rem; padding: 10px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
         body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        
+        body.generating-pdf .legend { border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; display: grid !important; }
+        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; }
+
+        body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
+        body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
+        body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+
         
         /* Setări Legenda pentru PDF */
         body.generating-pdf .legend { border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; display: grid !important; }
@@ -130,6 +148,7 @@
         body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
         body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
         body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+
     </style>
 </head>
 <body>
