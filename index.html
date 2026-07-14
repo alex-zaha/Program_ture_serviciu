@@ -1,39 +1,467 @@
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>CalculTure Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Librăria pentru generare PDF -->
+    <!-- Librărie PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        body { background: #050505; color: white; font-family: 'Inter', sans-serif; padding: 15px; margin: 0; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { background: #050505; color: white; font-family: 'Inter', sans-serif; padding: 15px; margin: 0; padding-bottom: 40px; }
         
-        /* Header de Brand (Logo + Nume) */
+        /* Header */
         .brand-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-top: 5px; }
         .brand-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #22c55e); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
         .brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; background: linear-gradient(90deg, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
+        /* Selector Custom Profile */
+        .custom-select-container { position: relative; margin-bottom: 20px; }
+        .profile-label { font-size: 0.72rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 8px; padding-left: 2px; }
+        .custom-select-trigger { background: #0f172a; border: 1px solid #1e293b; padding: 14px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; transition: all 0.25s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); }
+        .custom-select-trigger.active { border-color: #3b82f6; background: #11192e; }
+        .chevron-icon { transition: transform 0.25s ease; color: #64748b; }
+        .custom-select-trigger.active .chevron-icon { transform: rotate(180deg); color: #3b82f6; }
+
+        .custom-options-dropdown { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #0f172a; border: 1px solid #1e293b; border-radius: 14px; z-index: 99; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); overflow: hidden; padding: 6px; }
+        .custom-options-dropdown.show { display: block; }
+        .custom-option { padding: 12px 14px; border-radius: 10px; cursor: pointer; transition: background 0.2s ease; margin-bottom: 4px; border: 1px solid transparent; }
+        .custom-option:active { background: #1e293b; }
+        .opt-title { font-size: 0.88rem; font-weight: 700; color: #f1f5f9; margin-bottom: 3px; }
+        .opt-desc { font-size: 0.75rem; color: #64748b; line-height: 1.4; }
+        .custom-option.active { background: #1e293b; border-color: rgba(59, 130, 246, 0.2); }
+        .custom-option.active .opt-title { color: #3b82f6; }
+
+        /* Navigare Lună */
         .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        #lunaAn { font-weight: 700; letter-spacing: 0.5px; color: #f1f5f9; margin: 0; font-size: 1.25rem; }
+        #lunaAn { font-weight: 700; letter-spacing: 0.5px; color: #f1f5f9; margin: 0; font-size: 1.25rem; text-transform: capitalize; }
+        .nav-btn { background: #0f172a; border: 1px solid #1e293b; color: white; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        .nav-btn:active { background: #1e293b; }
+
+        /* Panou de Statistici Premium */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+        .stat-val { font-size: 1.35rem; font-weight: 800; color: #f1f5f9; }
+        .stat-lbl { font-size: 0.72rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+        .stat-sub { font-size: 0.68rem; color: #94a3b8; font-weight: 500; margin-top: 2px; }
         
-        .print-title { display: none; }
+        /* Acțiuni Aplicație */
+        .actions-block { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .action-btn { width: 100%; padding: 12px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; transition: background 0.2s; }
+        .btn-pdf { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; }
+        .btn-pdf:active { background: #334155; }
 
-        .info-banner { background: #0f172a; border: 1px solid #1e293b; padding: 12px 15px; border-radius: 12px; font-size: 0.78rem; line-height: 1.45; color: #94a3b8; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); }
-        .info-banner b { color: #22c55e; font-weight: 600; }
-
-        .print-btn { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; width: 100%; padding: 11px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; }
-        .print-btn:active { background: #334155; }
-
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-        .day { padding: 12px 0; border-radius: 12px; text-align: center; font-weight: 600; box-shadow: inset 0 0 5px rgba(255,255,255,0.1); cursor: pointer; user-select: none; }
-        .header { font-weight: bold; color: #64748b; background: transparent; box-shadow: none; cursor: default; }
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; position: relative; }
+        .day { padding: 14px 0; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; cursor: pointer; user-select: none; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .header { font-weight: 700; color: #64748b; background: transparent; cursor: default; padding: 5px 0; font-size: 0.85rem; }
         
+        /* Indicator punct luminos pentru Notițe */
+        .note-indicator { width: 4px; height: 4px; background-color: #22c55e; border-radius: 50%; position: absolute; bottom: 4px; box-shadow: 0 0 6px #22c55e; }
+
         /* Culori Ture */
         .liber { background: #007bff; color: white; }
         .sch1 { background: #28a745; color: white; }
         .sch2 { background: #fd7e14; color: white; }
+        .sch3 { background: #6c757d; color: white; }
+        .tura12d { background: #dc3545; color: white; }
+        .tura12n { background: #e83e8c; color: white; }
+
+        /* Legendă */
+        .legend { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem; border-top: 1px solid #1e293b; padding-top: 15px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-weight: 500; }
+        .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+
+        /* Fereastră Selecție (Modal Complex) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; }
+        .modal-content { background: #0f172a; padding: 20px; border-radius: 16px; border: 1px solid #1e293b; width: 88%; max-width: 320px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .modal-title { margin-top: 0; font-size: 0.95rem; color: #f1f5f9; font-weight: 700; margin-bottom: 15px; text-align: center; }
+        
+        .modal-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .opt-btn { padding: 11px; border: none; border-radius: 10px; color: white; font-weight: 700; font-family: inherit; cursor: pointer; text-align: center; font-size: 0.88rem; }
+        
+        /* Secțiune Notițe în Modal */
+        .modal-notes-section { border-top: 1px solid #1e293b; padding-top: 12px; margin-top: 12px; }
+        .notes-label { font-size: 0.72rem; color: #64748b; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 6px; text-align: left; }
+        .notes-input { width: 100%; background: #050505; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; color: white; font-family: inherit; font-size: 0.85rem; resize: none; min-height: 45px; }
+        .notes-input:focus { border-color: #3b82f6; outline: none; }
+        .btn-salveaza-nota { width: 100%; background: #22c55e; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; margin-top: 8px; cursor: pointer; font-size: 0.85rem; }
+
+        /* Toast */
+        .toast-notification { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #15803d; color: white; padding: 14px 20px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; text-align: center; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s; opacity: 0; border: 1px solid #22c55e; }
+        .toast-notification.show { bottom: 30px; opacity: 1; }
+        
+        .print-title { display: none; }
+
+        /* STIL EXPORT PDF AUTOMAT */
+        body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
+        body.generating-pdf .nav-bar, 
+        body.generating-pdf .custom-select-container,
+        body.generating-pdf .actions-block, 
+        body.generating-pdf .toast-notification,
+        body.generating-pdf .modal-overlay { display: none !important; }
+        
+        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
+        body.generating-pdf .brand-logo { box-shadow: none !important; }
+        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; }
+        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 15px; }
+        body.generating-pdf .print-title h1 { font-size: 1.3rem; font-weight: 800; color: black; margin: 0; }
+        
+        body.generating-pdf .stats-grid { margin-bottom: 20px; gap: 15px; }
+        body.generating-pdf .stat-card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+        body.generating-pdf .stat-val { color: #0f172a !important; }
+        body.generating-pdf .stat-lbl { color: #64748b !important; }
+        body.generating-pdf .stat-sub { color: #475569 !important; }
+
+        body.generating-pdf .header { color: #475569 !important; }
+        body.generating-pdf .day { border: 1px solid #e2e8f0 !important; color: white !important; font-size: 0.85rem; padding: 10px 0; }
+        body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
+        body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; }
+        body.generating-pdf .legend { border-top: 1px solid #cbd5e1 !important; margin-top: 25px; }
+        body.generating-pdf .legend-item { color: #334155 !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Logo Brand -->
+    <div class="brand-header">
+        <div class="brand-logo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+        </div>
+        <div class="brand-name">CalculTure Pro</div>
+    </div>
+
+    <!-- Regim Lucru Selector -->
+    <div class="custom-select-container">
+        <span class="profile-label">Regim de lucru selectat:</span>
+        <div class="custom-select-trigger" onclick="toggleCustomSelect(event)">
+            <span id="customSelectLabel">Se încarcă...</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        </div>
+        <div class="custom-options-dropdown" id="customOptions">
+            <div class="custom-option" onclick="selecteazaProfilCustom('p1')" id="opt-p1">
+                <div class="opt-title">Grafic Continuu (4 Săptămâni)</div>
+                <div class="opt-desc">Structură complexă de 28 zile: 3 săpt. de 8h lucrate, 1 săpt. complet liberă + weekenduri de 12h.</div>
+            </div>
+            <div class="custom-option" onclick="selecteazaProfilCustom('p2')" id="opt-p2">
+                <div class="opt-title">Luni - Vineri (Doar Schimbul 1)</div>
+                <div class="opt-desc">Program fix de dimineață (8h). Sâmbăta și duminica sunt întotdeaute libere.</div>
+            </div>
+            <div class="custom-option" onclick="selecteazaProfilCustom('p3')" id="opt-p3">
+                <div class="opt-title">3 Schimburi Rotație (Luni - Vineri)</div>
+                <div class="opt-desc">Rotație săptămânală standard (Dimineață / Prânz / Noapte). Weekend complet liber.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigare Lună -->
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="schimbaLuna(-1)">«</button>
+        <h2 id="lunaAn">...</h2>
+        <button class="nav-btn" onclick="schimbaLuna(1)">»</button>
+    </div>
+
+    <!-- Titlu Vizibil Doar în PDF -->
+    <div class="print-title">
+        <h1 id="titluPdf">Program Ture</h1>
+    </div>
+
+    <!-- Panou Statistici (Dinamic) -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-val" id="statOre">0h</span>
+            <span class="stat-lbl">Ore Lucrate</span>
+            <div class="stat-sub" id="statNormaBalanza">Normă: 0h | Balanță: 0h</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statZile">0</span>
+            <span class="stat-lbl">Zile Muncă</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statNopti">0</span>
+            <span class="stat-lbl">Ture Noapte</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-val" id="statLibere">0</span>
+            <span class="stat-lbl">Zile Libere</span>
+        </div>
+    </div>
+
+    <!-- Bloc Acțiuni Premium -->
+    <div class="actions-block">
+        <button class="action-btn btn-pdf" onclick="descargaPdf()">
+            📄 Descarcă Calendar PDF
+        </button>
+    </div>
+
+    <!-- Grila Calendar -->
+    <div class="calendar-grid" id="calendar"></div>
+
+    <!-- Legendă Dinamică -->
+    <div class="legend" id="legendContainer">
+        <div class="legend-item" data-shift="L"><div class="box" style="background:#007bff"></div> Liber</div>
+        <div class="legend-item" data-shift="S1"><div class="box" style="background:#28a745"></div> Schimb 1</div>
+        <div class="legend-item" data-shift="S2"><div class="box" style="background:#fd7e14"></div> Schimb 2</div>
+        <div class="legend-item" data-shift="S3"><div class="box" style="background:#6c757d"></div> Schimb 3</div>
+        <div class="legend-item" data-shift="12D"><div class="box" style="background:#dc3545"></div> 12h Dimineață</div>
+        <div class="legend-item" data-shift="12N"><div class="box" style="background:#e83e8c"></div> 12h Noapte</div>
+    </div>
+
+    <!-- Modal Avansat (Ture + Notițe) -->
+    <div class="modal-overlay" id="shiftModal" onclick="inchideModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-title" id="modalData">Configurare Zi</div>
+            
+            <div class="modal-options">
+                <button class="opt-btn liber" data-shift="L" onclick="seteazaTuraCod('L')">Liber</button>
+                <button class="opt-btn sch1" data-shift="S1" onclick="seteazaTuraCod('S1')">Schimb 1</button>
+                <button class="opt-btn sch2" data-shift="S2" onclick="seteazaTuraCod('S2')">Schimb 2</button>
+                <button class="opt-btn sch3" data-shift="S3" onclick="seteazaTuraCod('S3')">Schimb 3</button>
+                <button class="opt-btn tura12d" data-shift="12D" onclick="seteazaTuraCod('12D')">12h Dimineață</button>
+                <button class="opt-btn tura12n" data-shift="12N" onclick="seteazaTuraCod('12N')">12h Noapte</button>
+            </div>
+
+            <div class="modal-notes-section">
+                <label class="notes-label">Notiță / Planificare:</label>
+                <textarea class="notes-input" id="notaText" placeholder="Adaugă un memento (ex: programare, concediu...)"></textarea>
+                <button class="btn-salveaza-nota" onclick="salveazaNotaText()">Salvează Notița</button>
+            </div>
+            
+            <button class="opt-btn" style="background:#334155; margin-top:12px; width:100%;" onclick="inchideModal()">Închide</button>
+        </div>
+    </div>
+
+    <!-- Alerte Toast -->
+    <div class="toast-notification" id="toastMsg"></div>
+
+    <script>
+        let dataCurenta = new Date();
+        const startReferinta = new Date(2026, 5, 29); // Luni, 29 Iunie 2026
+        
+        const shiftClasses = { "L": "liber", "S1": "sch1", "S2": "sch2", "S3": "sch3", "12D": "tura12d", "12N": "tura12n" };
+        const shiftOreVal = { "L": 0, "S1": 8, "S2": 8, "S3": 8, "12D": 12, "12N": 12 };
+        
+        const profiluri = {
+            "p1": { lungime: 28, titluScurt: "Grafic Continuu (4 Săptămâni)", implicit: ["L", "L", "L", "L", "L", "12D", "12D", "S3", "S3", "S3", "S3", "S3", "L", "L", "S2", "S2", "S2", "S2", "S2", "L", "L", "S1", "S1", "S1", "S1", "S1", "12N", "12N"] },
+            "p2": { lungime: 7, titluScurt: "Luni - Vineri (Doar Schimbul 1)", implicit: ["S1", "S1", "S1", "S1", "S1", "L", "L"] },
+            "p3": { lungime: 21, titluScurt: "3 Schimburi Rotație (Luni - Vineri)", implicit: ["S1","S1","S1","S1","S1","L","L","S2","S2","S2","S2","S2","L","L","S3","S3","S3","S3","S3","L","L"] }
+        };
+
+        const optiuniPermiseProfil = {
+            "p1": ["L", "S1", "S2", "S3", "12D", "12N"],
+            "p2": ["L", "S1"],
+            "p3": ["L", "S1", "S2", "S3"]
+        };
+
+        let profilCurent = localStorage.getItem('activeProfile') || 'p1';
+        let zileCiclu = JSON.parse(localStorage.getItem('pattern_' + profilCurent)) || profiluri[profilCurent].implicit;
+        
+        let exceptiiZile = JSON.parse(localStorage.getItem('shift_exceptions_v2')) || {};
+        let selectatDataStr = null;
+
+        function calculeazaZileLucratoareLuna(an, luna) {
+            let zileTotal = new Date(an, luna + 1, 0).getDate();
+            let contorLucratoare = 0;
+            for (let i = 1; i <= zileTotal; i++) {
+                let d = new Date(an, luna, i);
+                let ziSaptamana = d.getDay(); 
+                if (ziSaptamana !== 0 && ziSaptamana !== 6) {
+                    contorLucratoare++;
+                }
+            }
+            return contorLucratoare;
+        }
+
+        function genCalendar() {
+            const container = document.getElementById('calendar');
+            container.innerHTML = '<div class="day header">Lu</div><div class="day header">Ma</div><div class="day header">Mi</div><div class="day header">Jo</div><div class="day header">Vi</div><div class="day header">Sâ</div><div class="day header">Du</div>';
+            
+            let textLunaAn = dataCurenta.toLocaleDateString('ro-RO', {month: 'long', year: 'numeric'});
+            document.getElementById('lunaAn').innerText = textLunaAn;
+            
+            let d = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth(), 1);
+            let offset = (d.getDay() + 6) % 7;
+            for(let i=0; i<offset; i++) container.innerHTML += `<div class="day"></div>`;
+
+            let zileLuna = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth()+1, 0).getDate();
+            let azi = new Date();
+            let lenCiclu = profiluri[profilCurent].lungime;
+
+            let tureFolosite = new Set();
+            let oreLucrate = 0, zileMunca = 0, noptiMunca = 0, zileLibere = 0;
+
+            for(let i=1; i<=zileLuna; i++) {
+                let curr = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth(), i);
+                let dateStr = `${curr.getFullYear()}-${String(curr.getMonth()+1).padStart(2,'0')}-${String(curr.getDate()).padStart(2,'0')}`;
+                
+                let cod = "";
+                if (exceptiiZile[dateStr] && exceptiiZile[dateStr].tura) {
+                    cod = exceptiiZile[dateStr].tura;
+                } else {
+                    let diff = Math.floor((curr - startReferinta) / 86400000);
+                    let ciclu = ((diff % lenCiclu) + lenCiclu) % lenCiclu;
+                    cod = zileCiclu[ciclu];
+                }
+                
+                if (cod) tureFolosite.add(cod);
+                
+                let ore = shiftOreVal[cod] || 0;
+                oreLucrate += ore;
+                if (ore > 0) zileMunca++;
+                if (cod === "L") zileLibere++;
+                if (cod === "S3" || cod === "12N") noptiMunca++;
+
+                let css = shiftClasses[cod] || "liber";
+                let stilAzi = (curr.toDateString() === azi.toDateString()) ? "outline: 2px solid white; outline-offset: -2px;" : "";
+                let areNota = (exceptiiZile[dateStr] && exceptiiZile[dateStr].nota) ? '<div class="note-indicator"></div>' : '';
+                
+                container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${dateStr}', ${i})">${i}${areNota}</div>`;
+            }
+
+            // Calcul Normă (Standard)
+            let zileLucratoareNormale = calculeazaZileLucratoareLuna(dataCurenta.getFullYear(), dataCurenta.getMonth());
+            let normaOreLuna = zileLucratoareNormale * 8;
+            
+            // Calcul balanță brută
+            let balanzaOre = oreLucrate - normaOreLuna;
+            
+            // LOGICĂ AJUSTARE P1 (Flux Continuu)
+            // Scădem 1 oră din balanță pentru a compensa weekend-urile de 12h
+            if (profilCurent === 'p1') {
+                balanzaOre -= 1;
+            }
+            
+            // Formatare text balanță
+            let textBalanza = balanzaOre >= 0 ? `+${balanzaOre}h` : `${balanzaOre}h`;
+            let culoareBalanza = balanzaOre >= 0 ? '#22c55e' : '#ef4444';
+
+            // Actualizare interfață statistici
+            document.getElementById('statOre').innerText = oreLucrate + "h";
+            document.getElementById('statNormaBalanza').innerHTML = `Normă: ${normaOreLuna}h | Balanță: <span style="color: ${culoareBalanza}; font-weight: 700;">${textBalanza}</span>`;
+            
+            document.getElementById('statZile').innerText = zileMunca;
+            document.getElementById('statNopti').innerText = noptiMunca;
+            document.getElementById('statLibere').innerText = zileLibere;
+
+            document.querySelectorAll('#legendContainer .legend-item').forEach(item => {
+                let shiftCode = item.getAttribute('data-shift');
+                item.style.display = tureFolosite.has(shiftCode) ? 'flex' : 'none';
+            });
+        }
+
+        function toggleCustomSelect(event) {
+            event.stopPropagation();
+            document.getElementById('customOptions').classList.toggle('show');
+            document.querySelector('.custom-select-trigger').classList.toggle('active');
+        }
+
+        function updateCustomSelectUI() {
+            document.getElementById('customSelectLabel').innerText = profiluri[profilCurent].titluScurt;
+            document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('active'));
+            const elementActiv = document.getElementById('opt-' + profilCurent);
+            if (elementActiv) elementActiv.classList.add('active');
+        }
+
+        function selecteazaProfilCustom(id) {
+            profilCurent = id;
+            localStorage.setItem('activeProfile', profilCurent);
+            zileCiclu = JSON.parse(localStorage.getItem('pattern_' + profilCurent)) || profiluri[profilCurent].implicit;
+            updateCustomSelectUI();
+            genCalendar();
+        }
+
+        window.addEventListener('click', function() {
+            document.getElementById('customOptions').classList.remove('show');
+            document.querySelector('.custom-select-trigger').classList.remove('active');
+        });
+
+        function deschideModal(dateStr, numarZi) {
+            selectatDataStr = dateStr;
+            let componente = dateStr.split('-');
+            document.getElementById('modalData').innerText = `Configurare: ${numarZi} ${dataCurenta.toLocaleDateString('ro-RO', {month: 'long'})} ${componente[0]}`;
+            document.getElementById('notaText').value = (exceptiiZile[dateStr] && exceptiiZile[dateStr].nota) ? exceptiiZile[dateStr].nota : "";
+
+            let permise = optiuniPermiseProfil[profilCurent] || ["L", "S1", "S2", "S3", "12D", "12N"];
+            document.querySelectorAll('.modal-options .opt-btn[data-shift]').forEach(btn => {
+                let shiftCode = btn.getAttribute('data-shift');
+                btn.style.display = permise.includes(shiftCode) ? 'block' : 'none';
+            });
+
+            document.getElementById('shiftModal').style.display = 'flex';
+        }
+
+        function inchideModal() {
+            document.getElementById('shiftModal').style.display = 'none';
+        }
+
+        function seteazaTuraCod(codTura) {
+            if (selectatDataStr) {
+                if (!exceptiiZile[selectatDataStr]) exceptiiZile[selectatDataStr] = {};
+                exceptiiZile[selectatDataStr].tura = codTura;
+                localStorage.setItem('shift_exceptions_v2', JSON.stringify(exceptiiZile));
+                genCalendar();
+                showToast("✅ Tura a fost actualizată doar pentru această zi!");
+            }
+        }
+
+        function salveazaNotaText() {
+            if (selectatDataStr) {
+                let text = document.getElementById('notaText').value.trim();
+                if (!exceptiiZile[selectatDataStr]) exceptiiZile[selectatDataStr] = {};
+                exceptiiZile[selectatDataStr].nota = text;
+                
+                if (!exceptiiZile[selectatDataStr].tura && !exceptiiZile[selectatDataStr].nota) {
+                    delete exceptiiZile[selectatDataStr];
+                }
+
+                localStorage.setItem('shift_exceptions_v2', JSON.stringify(exceptiiZile));
+                inchideModal();
+                genCalendar();
+                showToast("📝 Notiță memorată cu succes!");
+            }
+        }
+
+        function showToast(mesaj) {
+            let toast = document.getElementById('toastMsg');
+            toast.innerText = mesaj;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+        }
+        
+        function descargaPdf() {
+            let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
+            document.getElementById('titluPdf').innerText = `Program Ture Simplificat • ${numeLuna}`;
+            document.body.classList.add('generating-pdf');
+            
+            const element = document.body;
+            const opt = {
+                margin:       0,
+                filename:     `Grafic_Ture_${numeLuna.replace(' ', '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.classList.remove('generating-pdf');
+                showToast("📄 PDF descărcat cu succes în folderul Downloads!");
+            });
+        }
+
+        function schimbaLuna(v) { dataCurenta.setMonth(dataCurenta.getMonth() + v); genCalendar(); }
+        
+        updateCustomSelectUI();
+        genCalendar();
+    </script>
+</body>
+</html>
         .sch3 { background: #6c757d; color: white; }
         .tura12d { background: #dc3545; color: white; }
         .tura12n { background: #e83e8c; color: white; }
