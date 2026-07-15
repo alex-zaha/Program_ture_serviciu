@@ -97,57 +97,66 @@
         
         .print-title { display: none; }
 
-        /* STIL EXPORT PDF AUTOMAT - REVIZUIT */
-        body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
-        body.generating-pdf .nav-bar, 
-        body.generating-pdf .custom-select-container,
-        body.generating-pdf .actions-block, 
-        body.generating-pdf .toast-notification,
-        body.generating-pdf .modal-overlay { display: none !important; }
-        
-        /* Forțăm afișarea header-ului */
-        body.generating-pdf .calendar-grid .header { 
-            display: flex !important; 
-            color: #000000 !important; 
-            font-weight: 900 !important; 
-            background: transparent !important; 
-            border: none !important;
-            justify-content: center;
-            align-items: center;
-        }
+        /* STIL EXPORT PDF AUTOMAT - REVIZUIT ȘI REPARAT */
+body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
 
-        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
-        body.generating-pdf .brand-logo { box-shadow: none !important; }
-        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; }
-        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 15px; }
-        body.generating-pdf .print-title h1 { font-size: 1.3rem; font-weight: 800; color: black; margin: 0; }
-        
-        body.generating-pdf .stats-grid { margin-bottom: 20px; gap: 15px; }
-        body.generating-pdf .stat-card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
-        body.generating-pdf .stat-val { color: #0f172a !important; }
-        body.generating-pdf .stat-lbl { color: #64748b !important; }
-        body.generating-pdf .stat-sub { color: #475569 !important; }
+/* Ascundem elementele inutile */
+body.generating-pdf .nav-bar, 
+body.generating-pdf .custom-select-container,
+body.generating-pdf .actions-block, 
+body.generating-pdf .toast-notification,
+body.generating-pdf .modal-overlay { display: none !important; }
 
-        body.generating-pdf .day { border: 1px solid #e2e8f0 !important; color: white !important; font-size: 0.85rem; padding: 10px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
-        body.generating-pdf .note-indicator { background-color: #16a34a !important; bottom: 2px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-        
-        body.generating-pdf .legend { border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; display: grid !important; }
-        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; }
+/* Forțăm afișarea corectă a grid-ului și a header-ului (zilele săptămânii) */
+body.generating-pdf .calendar-grid { 
+    display: grid !important; 
+    grid-template-columns: repeat(7, 1fr) !important; 
+}
 
-        body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
-        body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
-        body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+body.generating-pdf .header { 
+    display: flex !important; 
+    color: #000000 !important; 
+    font-weight: 900 !important; 
+    background: #f1f5f9 !important; 
+    border: 1px solid #e2e8f0 !important; 
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0 !important;
+}
 
-        
-        /* Setări Legenda pentru PDF */
-        body.generating-pdf .legend { border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; display: grid !important; }
-        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; }
+/* Stil branding */
+body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
+body.generating-pdf .brand-logo { box-shadow: none !important; }
+body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; }
+body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 15px; }
+body.generating-pdf .print-title h1 { font-size: 1.3rem; font-weight: 800; color: black; margin: 0; }
 
-        /* Stil Notițe în PDF */
-        body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
-        body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
-        body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+/* Stil Statistici */
+body.generating-pdf .stats-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; margin-bottom: 20px; gap: 15px; }
+body.generating-pdf .stat-card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+body.generating-pdf .stat-val { color: #0f172a !important; }
+body.generating-pdf .stat-lbl { color: #64748b !important; }
+body.generating-pdf .stat-sub { color: #475569 !important; }
+
+/* REPARAT: Textul zilelor acum este NEGRU */
+body.generating-pdf .day { 
+    border: 1px solid #e2e8f0 !important; 
+    color: black !important; 
+    font-size: 0.85rem; 
+    padding: 10px 0; 
+    -webkit-print-color-adjust: exact; 
+    print-color-adjust: exact; 
+}
+body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
+
+/* Stil Legendă și Notițe */
+body.generating-pdf .legend { display: grid !important; grid-template-columns: 1fr 1fr !important; border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; }
+body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; display: flex !important; align-items: center; gap: 10px; }
+
+body.generating-pdf .pdf-notes-section { display: block !important; border-top: 2px solid #e2e8f0; margin-top: 20px; padding-top: 15px; color: #0f172a !important; font-size: 0.85rem; page-break-inside: avoid; }
+body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
+body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+
 
     </style>
 </head>
@@ -223,10 +232,14 @@
 
     <!-- Bloc Acțiuni Premium -->
     <div class="actions-block">
-        <button class="action-btn btn-pdf" onclick="descargaPdf()">
-            📄 Descarcă Calendar PDF
-        </button>
-    </div>
+    <button class="action-btn btn-pdf" onclick="descargaPdf()">
+       ​📥 Descarcă Calendar PDF
+    </button>
+    <button class="action-btn btn-ics" onclick="exportaCalendar()" style="background: #15803d; border-color: #166534;">
+        📅 Exportă notițele în calendar
+    </button>
+</div>
+
 
     <!-- Grila Calendar -->
     <div class="calendar-grid" id="calendar"></div>
@@ -498,13 +511,13 @@
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
             document.getElementById('titluPdf').innerText = `Program Ture Simplificat • ${numeLuna}`;
             
-            // Activăm clasa pentru styling de PDF și afișăm notițele temporar
+                        // --- EXPORT PDF ---
             document.body.classList.add('generating-pdf');
             document.getElementById('pdfNotesContainer').style.display = 'block';
             
             const element = document.body;
             const opt = {
-                margin:       [10, 10, 10, 10], // Margin adăugat ca să nu taie colțurile
+                margin:       [10, 10, 10, 10],
                 filename:     `Grafic_Ture_${numeLuna.replace(' ', '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
@@ -512,12 +525,50 @@
             };
             
             html2pdf().set(opt).from(element).save().then(() => {
-                // Revertim schimbările după salvare
                 document.body.classList.remove('generating-pdf');
                 document.getElementById('pdfNotesContainer').style.display = 'none';
                 showToast("📄 PDF descărcat cu succes!");
             });
         }
+
+        // --- EXPORT CALENDAR (.ics) ---
+                            function exportaCalendar() {
+        let icsContent = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//CalculTure//RO", "METHOD:PUBLISH"];
+        
+        let zileLuna = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth() + 1, 0).getDate();
+        
+        for (let i = 1; i <= zileLuna; i++) {
+            let y = dataCurenta.getFullYear();
+            let m = String(dataCurenta.getMonth() + 1).padStart(2, '0');
+            let d = String(i).padStart(2, '0');
+            let dateStr = `${y}-${m}-${d}`;
+            let dateIcs = `${y}${m}${d}`;
+            
+            let nota = exceptiiZile[dateStr]?.nota || "";
+
+            if (nota !== "") {
+                icsContent.push("BEGIN:VEVENT");
+                icsContent.push(`UID:nota-${dateStr}@calcul-ture.ro`);
+                icsContent.push(`DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`);
+                icsContent.push(`SUMMARY:${nota}`);
+                icsContent.push(`DTSTART;VALUE=DATE:${dateIcs}`);
+                icsContent.push(`DTEND;VALUE=DATE:${dateIcs}`);
+                icsContent.push("END:VEVENT");
+            }
+        }
+        
+        icsContent.push("END:VCALENDAR");
+
+        let blob = new Blob([icsContent.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+        let link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Note_${dataCurenta.getMonth() + 1}_2026.ics`;
+        link.click();
+        showToast("📅 Note exportate cu succes!");
+    }
+
+
+
 
         function schimbaLuna(v) { dataCurenta.setMonth(dataCurenta.getMonth() + v); genCalendar(); }
         
@@ -526,3 +577,4 @@
     </script>
 </body>
 </html>
+
