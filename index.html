@@ -107,14 +107,14 @@
         .print-title { display: none; }
 
         /* ========================================================= */
-        /* STIL EXPORT PDF OPTIMIZAT PE TOATĂ PAGINA A4 */
+        /* STIL EXPORT PDF RESTRUCTURAT PE TOATĂ PAGINA A4 */
         /* ========================================================= */
         body.generating-pdf { 
-            width: 794px !important; 
-            max-width: 794px !important; 
-            min-width: 794px !important; 
+            width: 780px !important; 
+            max-width: 780px !important; 
+            min-width: 780px !important; 
             margin: 0 auto !important; 
-            padding: 25px !important; 
+            padding: 30px 25px !important; 
             background: #ffffff !important; 
             color: #0f172a !important; 
             box-sizing: border-box !important;
@@ -126,36 +126,36 @@
         body.generating-pdf .toast-notification,
         body.generating-pdf .modal-overlay { display: none !important; }
 
-        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
-        body.generating-pdf .brand-logo { box-shadow: none !important; }
-        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.3rem !important; }
+        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 8px; }
+        body.generating-pdf .brand-logo { width: 36px !important; height: 36px !important; box-shadow: none !important; }
+        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.4rem !important; }
         
-        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 20px; }
-        body.generating-pdf .print-title h1 { font-size: 1.5rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
+        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 25px; }
+        body.generating-pdf .print-title h1 { font-size: 1.65rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
 
-        /* Panou statistici orizontal pe 4 coloane în PDF */
+        /* Panou statistici extins în PDF */
         body.generating-pdf .stats-grid { 
             display: grid !important; 
             grid-template-columns: repeat(4, 1fr) !important; 
-            margin-bottom: 25px !important; 
-            gap: 12px !important; 
+            margin-bottom: 28px !important; 
+            gap: 14px !important; 
         }
         body.generating-pdf .stat-card { 
             background: #f8fafc !important; 
             border: 1px solid #cbd5e1 !important; 
-            padding: 12px !important; 
-            border-radius: 10px !important; 
+            padding: 14px 12px !important; 
+            border-radius: 12px !important; 
         }
-        body.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.4rem !important; }
-        body.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.72rem !important; font-weight: 700 !important; }
-        body.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.7rem !important; }
+        body.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.55rem !important; }
+        body.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.75rem !important; font-weight: 700 !important; }
+        body.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.72rem !important; }
 
         /* Grilă Calendar Marită în PDF */
         body.generating-pdf .calendar-grid { 
             display: grid !important; 
             grid-template-columns: repeat(7, 1fr) !important; 
-            gap: 8px !important;
-            margin-bottom: 20px !important;
+            gap: 10px !important;
+            margin-bottom: 28px !important;
         }
 
         body.generating-pdf .header { 
@@ -166,18 +166,18 @@
             border: 1px solid #cbd5e1 !important; 
             justify-content: center;
             align-items: center;
-            padding: 10px 0 !important;
-            font-size: 0.95rem !important;
-            border-radius: 6px !important;
+            padding: 12px 0 !important;
+            font-size: 1.05rem !important;
+            border-radius: 8px !important;
         }
 
         body.generating-pdf .day { 
             border: 1px solid rgba(0,0,0,0.08) !important; 
             color: white !important; 
-            font-size: 1.05rem !important; 
-            font-weight: 700 !important;
-            padding: 16px 0 !important; 
-            border-radius: 8px !important;
+            font-size: 1.2rem !important; 
+            font-weight: 800 !important;
+            padding: 22px 0 !important; 
+            border-radius: 10px !important;
             -webkit-print-color-adjust: exact !important; 
             print-color-adjust: exact !important; 
         }
@@ -187,32 +187,33 @@
             display: grid !important; 
             grid-template-columns: repeat(3, 1fr) !important; 
             border-top: 2px solid #e2e8f0 !important; 
-            margin-top: 20px !important; 
-            padding-top: 15px !important; 
-            gap: 12px !important;
+            margin-top: 25px !important; 
+            padding-top: 20px !important; 
+            gap: 14px !important;
         }
-        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.9rem !important; display: flex !important; align-items: center; gap: 8px; }
+        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.95rem !important; display: flex !important; align-items: center; gap: 10px; }
+        body.generating-pdf .box { width: 16px !important; height: 16px !important; border-radius: 4px !important; }
 
         /* Stil Notițe în PDF */
         body.generating-pdf .pdf-notes-section { 
             display: block !important; 
             border-top: 2px solid #e2e8f0 !important; 
-            margin-top: 25px !important; 
-            padding-top: 15px !important; 
+            margin-top: 28px !important; 
+            padding-top: 20px !important; 
             color: #0f172a !important; 
             page-break-inside: avoid !important; 
         }
-        body.generating-pdf .pdf-notes-section h3 { font-size: 1.1rem !important; margin-bottom: 12px !important; color: #0f172a !important; font-weight: 800 !important; }
+        body.generating-pdf .pdf-notes-section h3 { font-size: 1.15rem !important; margin-bottom: 12px !important; color: #0f172a !important; font-weight: 800 !important; }
         
         body.generating-pdf .pdf-note-card {
             background: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            border-left: 4px solid #3b82f6 !important;
-            padding: 10px 14px !important;
-            border-radius: 8px !important;
-            margin-bottom: 8px !important;
-            font-size: 0.9rem !important;
-            line-height: 1.4 !important;
+            border: 1px solid #cbd5e1 !important;
+            border-left: 5px solid #3b82f6 !important;
+            padding: 12px 16px !important;
+            border-radius: 10px !important;
+            margin-bottom: 10px !important;
+            font-size: 0.95rem !important;
+            line-height: 1.5 !important;
         }
     </style>
 </head>
@@ -457,7 +458,7 @@
                     let separare = (extra > 0 && notaText) ? ' — ' : '';
                     let formatNota = notaText ? `<span>${notaText}</span>` : '';
                     
-                    pdfNotes.innerHTML += `<div class="pdf-note-card"><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}:</b> ${infoExtra}${separare}${formatNota}</div>`;
+                    pdfNotes.innerHTML += `<div class="pdf-note-card"><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}.:</b> ${infoExtra}${separare}${formatNota}</div>`;
                 }
 
                 if (cod) tureFolosite.add(cod);
@@ -597,12 +598,12 @@
             document.getElementById('titluPdf').innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
             
             document.body.classList.add('generating-pdf');
-            await new Promise(resolve => setTimeout(resolve, 250));
+            await new Promise(resolve => setTimeout(resolve, 300));
             
             const element = document.body;
             const opt = {
-                margin:       [8, 8, 8, 8],
-                filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(' ', '_')}.pdf`,
+                margin:       [5, 5, 5, 5],
+                filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, windowWidth: 800, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
