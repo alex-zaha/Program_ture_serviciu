@@ -109,7 +109,6 @@
         /* STIL EXPORT PDF AUTOMAT */
         body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
 
-        /* Ascundem elementele inutile */
         body.generating-pdf .nav-bar, 
         body.generating-pdf .custom-select-container,
         body.generating-pdf .actions-block, 
@@ -157,7 +156,6 @@
         body.generating-pdf .legend { display: grid !important; grid-template-columns: 1fr 1fr !important; border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; }
         body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; display: flex !important; align-items: center; gap: 10px; }
 
-        /* Afișare Notițe în PDF */
         body.generating-pdf .pdf-notes-section { 
             display: block !important; 
             border-top: 2px solid #e2e8f0 !important; 
@@ -208,9 +206,9 @@
         </div>
     </div>
 
-    <!-- Selector Grupa Lucru (4 Grupe) -->
+    <!-- Selector Grupa Lucru (4 Grupe: A, B, C, D) -->
     <div class="custom-select-container">
-        <span class="profile-label">Grupa de lucru: Alege grupa în funcție de cum lucrezi</span>
+        <span class="profile-label">Grupa de lucru:</span>
         <div class="group-selector-grid">
             <button type="button" class="group-btn" id="btn-grupa-A" onclick="selecteazaGrupa('A')">Grupa A</button>
             <button type="button" class="group-btn" id="btn-grupa-B" onclick="selecteazaGrupa('B')">Grupa B</button>
@@ -231,7 +229,7 @@
         <h1 id="titluPdf">Program Ture</h1>
     </div>
 
-    <!-- Panou Statistici (Dinamic) -->
+    <!-- Panou Statistici -->
     <div class="stats-grid">
         <div class="stat-card">
             <span class="stat-val" id="statOre">0h</span>
@@ -252,7 +250,7 @@
         </div>
     </div>
 
-    <!-- Bloc Acțiuni Premium -->
+    <!-- Bloc Acțiuni -->
     <div class="actions-block">
         <button class="action-btn btn-pdf" onclick="descargaPdf()">
            📥 Descarcă Calendar PDF
@@ -275,10 +273,10 @@
         <div class="legend-item" data-shift="12N"><div class="box" style="background:#e83e8c"></div> 12h Noapte</div>
     </div>
 
-    <!-- Container Notițe PDF (Vizibil automat doar la generare PDF) -->
+    <!-- Container Notițe PDF -->
     <div id="pdfNotesContainer" class="pdf-notes-section"></div>
 
-    <!-- Modal Avansat (Ture + Notițe) -->
+    <!-- Modal Configurare Zi -->
     <div class="modal-overlay" id="shiftModal" onclick="inchideModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-title" id="modalData">Configurare Zi</div>
@@ -305,7 +303,7 @@
         </div>
     </div>
 
-    <!-- Alerte Toast -->
+    <!-- Toast Notification -->
     <div class="toast-notification" id="toastMsg"></div>
 
     <script>
@@ -330,11 +328,11 @@
         let profilCurent = localStorage.getItem('activeProfile') || 'p1';
         let zileCiclu = JSON.parse(localStorage.getItem('pattern_' + profilCurent)) || profiluri[profilCurent].implicit;
         
-        // Logica 4 Grupe de Lucru (A, B, C, D)
+        // Decalaj Grupe: A (0), B (+21 de zile -> echivalent -7 zile / 1 sapt inapoi), C (+14), D (+7)
         let grupaCurenta = localStorage.getItem('activeGroup') || 'A';
-        const decalajGrupe = { 'A': 0, 'B': 7, 'C': 14, 'D': 21 };
+        const decalajGrupe = { 'A': 0, 'B': 21, 'C': 14, 'D': 7 };
 
-        let exceptiiZile = JSON.parse(localStorage.getItem('shift_exceptions_v2')) || {};
+        let exceptiiZile = JSON.parse(localStorage.getItem('shift_exceptions_v3')) || {};
         let selectatDataStr = null;
 
         function selecteazaGrupa(grupa) {
@@ -387,24 +385,26 @@
 
             for(let i=1; i<=zileLuna; i++) {
                 let curr = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth(), i);
-                let dateStr = `${curr.getFullYear()}-${String(curr.getMonth()+1).padStart(2,'0')}-${String(curr.getDate()).padStart(2,'0')}`;
+                let rawDateStr = `${curr.getFullYear()}-${String(curr.getMonth()+1).padStart(2,'0')}-${String(curr.getDate()).padStart(2,'0')}`;
+                let keyExcepție = `${grupaCurenta}_${rawDateStr}`;
                 
                 let cod = "";
                 let extra = 0;
                 let notaText = "";
 
-                if (exceptiiZile[dateStr]) {
-                    cod = exceptiiZile[dateStr].tura || "";
-                    extra = parseInt(exceptiiZile[dateStr].extra) || 0;
-                    notaText = exceptiiZile[dateStr].nota || "";
-                } else {
+                if (exceptiiZile[keyExcepție]) {
+                    cod = exceptiiZile[keyExcepție].tura || "";
+                    extra = parseInt(exceptiiZile[keyExcepție].extra) || 0;
+                    notaText = exceptiiZile[keyExcepție].nota || "";
+                }
+                
+                if (!cod) {
                     let diff = Math.floor((curr - startReferinta) / 86400000);
                     let offsetGrupa = decalajGrupe[grupaCurenta] || 0;
                     let ciclu = (((diff + offsetGrupa) % lenCiclu) + lenCiclu) % lenCiclu;
                     cod = zileCiclu[ciclu];
                 }
                 
-                // Extragerea notițelor pentru PDF
                 if (extra > 0 || notaText) {
                     areNotiteLunix = true;
                     let infoExtra = extra > 0 ? `<strong>+${extra}h suplimentare</strong>` : '';
@@ -423,22 +423,21 @@
 
                 let css = shiftClasses[cod] || "liber";
                 let stilAzi = (curr.toDateString() === azi.toDateString()) ? "outline: 2px solid white; outline-offset: -2px;" : "";
-                let areNota = (exceptiiZile[dateStr] && exceptiiZile[dateStr].nota) ? '<div class="note-indicator"></div>' : '';
+                let areNota = (exceptiiZile[keyExcepție] && exceptiiZile[keyExcepție].nota) ? '<div class="note-indicator"></div>' : '';
                 
-                container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${dateStr}', ${i})">${i}${areNota}</div>`;
+                container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${rawDateStr}', ${i})">${i}${areNota}</div>`;
             }
 
             if(!areNotiteLunix) {
                 pdfNotes.innerHTML += '<p>Nu există notițe sau ore suplimentare planificate în această lună.</p>';
             }
 
-            // Calcul Normă (Standard)
             let zileLucratoareNormale = calculeazaZileLucratoareLuna(dataCurenta.getFullYear(), dataCurenta.getMonth());
             let normaOreLuna = zileLucratoareNormale * 8;
             
-            // Calcul balanță brută
             let balanzaOre = oreLucrate - normaOreLuna;
             
+            // Regula de -1h la balanță pentru profilul p1 (Grafic Continuu)
             if (profilCurent === 'p1') {
                 balanzaOre -= 1;
             }
@@ -487,10 +486,11 @@
 
         function deschideModal(dateStr, numarZi) {
             selectatDataStr = dateStr;
+            let cheieZi = `${grupaCurenta}_${dateStr}`;
             let componente = dateStr.split('-');
-            document.getElementById('modalData').innerText = `Configurare: ${numarZi} ${dataCurenta.toLocaleDateString('ro-RO', {month: 'long'})} ${componente[0]}`;
+            document.getElementById('modalData').innerText = `Configurare (Grupa ${grupaCurenta}): ${numarZi} ${dataCurenta.toLocaleDateString('ro-RO', {month: 'long'})} ${componente[0]}`;
             
-            const data = exceptiiZile[dateStr] || {};
+            const data = exceptiiZile[cheieZi] || {};
             document.getElementById('notaText').value = data.nota || "";
             document.getElementById('extraHoursInput').value = data.extra || "";
 
@@ -509,26 +509,28 @@
 
         function seteazaTuraCod(codTura) {
             if (selectatDataStr) {
-                if (!exceptiiZile[selectatDataStr]) exceptiiZile[selectatDataStr] = {};
-                exceptiiZile[selectatDataStr].tura = codTura;
-                localStorage.setItem('shift_exceptions_v2', JSON.stringify(exceptiiZile));
+                let cheieZi = `${grupaCurenta}_${selectatDataStr}`;
+                if (!exceptiiZile[cheieZi]) exceptiiZile[cheieZi] = {};
+                exceptiiZile[cheieZi].tura = codTura;
+                localStorage.setItem('shift_exceptions_v3', JSON.stringify(exceptiiZile));
                 genCalendar();
-                showToast("✅ Tura a fost actualizată doar pentru această zi!");
+                showToast("✅ Tura actualizată pentru Grupa " + grupaCurenta);
             }
         }
 
         function salveazaDateModal() {
             if (selectatDataStr) {
-                if (!exceptiiZile[selectatDataStr]) exceptiiZile[selectatDataStr] = {};
+                let cheieZi = `${grupaCurenta}_${selectatDataStr}`;
+                if (!exceptiiZile[cheieZi]) exceptiiZile[cheieZi] = {};
                 
-                exceptiiZile[selectatDataStr].nota = document.getElementById('notaText').value.trim();
-                exceptiiZile[selectatDataStr].extra = document.getElementById('extraHoursInput').value.trim();
+                exceptiiZile[cheieZi].nota = document.getElementById('notaText').value.trim();
+                exceptiiZile[cheieZi].extra = document.getElementById('extraHoursInput').value.trim();
                 
-                if (!exceptiiZile[selectatDataStr].tura && !exceptiiZile[selectatDataStr].nota && !exceptiiZile[selectatDataStr].extra) {
-                    delete exceptiiZile[selectatDataStr];
+                if (!exceptiiZile[cheieZi].tura && !exceptiiZile[cheieZi].nota && !exceptiiZile[cheieZi].extra) {
+                    delete exceptiiZile[cheieZi];
                 }
 
-                localStorage.setItem('shift_exceptions_v2', JSON.stringify(exceptiiZile));
+                localStorage.setItem('shift_exceptions_v3', JSON.stringify(exceptiiZile));
                 inchideModal();
                 genCalendar();
                 showToast("✅ Modificări salvate!");
@@ -542,24 +544,18 @@
             setTimeout(() => { toast.classList.remove('show'); }, 4000);
         }
         
-        /* --- EXPORT PDF REPARAT --- */
         async function descargaPdf() {
-            // Generăm calendarul să fim siguri că datele și notițele sunt fresh
             genCalendar();
-
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
-            document.getElementById('titluPdf').innerText = `Program Ture Simplificat • ${numeLuna}`;
+            document.getElementById('titluPdf').innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
             
-            // Trecem în modul vizual PDF
             document.body.classList.add('generating-pdf');
-            
-            // Pauză de 150ms pentru a-i ofer timp browserului să proceseze DOM-ul și layout-ul
             await new Promise(resolve => setTimeout(resolve, 150));
             
             const element = document.body;
             const opt = {
                 margin:       [10, 10, 10, 10],
-                filename:     `Grafic_Ture_${numeLuna.replace(' ', '_')}.pdf`,
+                filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(' ', '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 1 },
                 html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -571,12 +567,10 @@
             } catch (err) {
                 console.error("Eroare generare PDF:", err);
             } finally {
-                // Revenim la modul normal de afișare
                 document.body.classList.remove('generating-pdf');
             }
         }
 
-        /* --- EXPORT CALENDAR (.ics) --- */
         function exportaCalendar() {
             let icsContent = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//CalculTure//RO", "METHOD:PUBLISH"];
             let zileLuna = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth() + 1, 0).getDate();
@@ -586,13 +580,14 @@
                 let m = String(dataCurenta.getMonth() + 1).padStart(2, '0');
                 let d = String(i).padStart(2, '0');
                 let dateStr = `${y}-${m}-${d}`;
+                let cheieZi = `${grupaCurenta}_${dateStr}`;
                 let dateIcs = `${y}${m}${d}`;
                 
-                let nota = exceptiiZile[dateStr]?.nota || "";
+                let nota = exceptiiZile[cheieZi]?.nota || "";
 
                 if (nota !== "") {
                     icsContent.push("BEGIN:VEVENT");
-                    icsContent.push(`UID:nota-${dateStr}@calcul-ture.ro`);
+                    icsContent.push(`UID:nota-${cheieZi}@calcul-ture.ro`);
                     icsContent.push(`DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`);
                     icsContent.push(`SUMMARY:${nota}`);
                     icsContent.push(`DTSTART;VALUE=DATE:${dateIcs}`);
@@ -606,7 +601,7 @@
             let blob = new Blob([icsContent.join("\r\n")], { type: "text/calendar;charset=utf-8" });
             let link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Note_${dataCurenta.getMonth() + 1}_2026.ics`;
+            link.download = `Note_Grupa_${grupaCurenta}_${dataCurenta.getMonth() + 1}_2026.ics`;
             link.click();
             showToast("📅 Note exportate cu succes!");
         }
