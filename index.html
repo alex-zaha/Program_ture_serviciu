@@ -13,12 +13,15 @@
         *, *::before, *::after { box-sizing: border-box; }
         body { background: #050505; color: white; font-family: 'Inter', sans-serif; padding: 15px; margin: 0; padding-bottom: 40px; }
         
-        /* Header Brand */
+        /* Container Principal Exportabil */
+        #printableArea { background: transparent; padding: 0; border-radius: 0; }
+
+        /* Header */
         .brand-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-top: 5px; }
         .brand-logo { width: 32px; height: 32px; background: linear-gradient(135deg, #3b82f6, #22c55e); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
         .brand-name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; background: linear-gradient(90deg, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Selector Profil */
+        /* Selector Custom Profile */
         .custom-select-container { position: relative; margin-bottom: 20px; }
         .profile-label { font-size: 0.72rem; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 8px; padding-left: 2px; }
         .custom-select-trigger { background: #0f172a; border: 1px solid #1e293b; padding: 14px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: #f1f5f9; transition: all 0.25s ease; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); }
@@ -35,7 +38,7 @@
         .custom-option.active { background: #1e293b; border-color: rgba(59, 130, 246, 0.2); }
         .custom-option.active .opt-title { color: #3b82f6; }
 
-        /* Selector Grupa (A, B, C, D) */
+        /* Selector Grupa (4 Grupe) */
         .group-selector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
         .group-btn { background: #0f172a; border: 1px solid #1e293b; color: #94a3b8; padding: 10px 4px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; text-align: center; transition: all 0.2s ease; font-family: inherit; }
         .group-btn:active { background: #1e293b; }
@@ -47,7 +50,7 @@
         .nav-btn { background: #0f172a; border: 1px solid #1e293b; color: white; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
         .nav-btn:active { background: #1e293b; }
 
-        /* Panou Statistici */
+        /* Panou de Statistici Premium */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
         .stat-val { font-size: 1.35rem; font-weight: 800; color: #f1f5f9; }
@@ -60,11 +63,11 @@
         .btn-pdf { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; }
         .btn-pdf:active { background: #334155; }
 
-        /* Calendar Grid */
+        /* Calendar */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; position: relative; }
-        .day { padding: 14px 0; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; cursor: pointer; user-select: none; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .day { padding: 14px 0; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; cursor: pointer; user-select: none; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         
-        /* Zile Săptămână */
+        /* Antet Zile Săptămână */
         .header { 
             font-weight: 800; 
             color: #ffffff; 
@@ -75,32 +78,30 @@
             padding: 8px 0; 
             font-size: 0.85rem; 
             text-align: center;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
         
-        /* Indicator notiță zi */
-        .note-indicator { width: 6px; height: 6px; background-color: #22c55e; border-radius: 50%; position: absolute; bottom: 4px; box-shadow: 0 0 6px #22c55e; }
+        /* Indicator punct luminos pentru Notițe */
+        .note-indicator { width: 4px; height: 4px; background-color: #22c55e; border-radius: 50%; position: absolute; bottom: 4px; box-shadow: 0 0 6px #22c55e; }
 
         /* Culori Ture */
-        .liber { background: #007bff; color: white; }
-        .sch1 { background: #28a745; color: white; }
-        .sch2 { background: #fd7e14; color: white; }
-        .sch3 { background: #6c757d; color: white; }
-        .tura12d { background: #dc3545; color: white; }
-        .tura12n { background: #e83e8c; color: white; }
+        .liber { background: #007bff !important; color: white !important; }
+        .sch1 { background: #28a745 !important; color: white !important; }
+        .sch2 { background: #fd7e14 !important; color: white !important; }
+        .sch3 { background: #6c757d !important; color: white !important; }
+        .tura12d { background: #dc3545 !important; color: white !important; }
+        .tura12n { background: #e83e8c !important; color: white !important; }
 
         /* Legendă */
-        .legend { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem; border-top: 1px solid #1e293b; padding-top: 15px; }
+        .legend { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem; border-top: 1px solid #1e293b; padding-top: 15px; }
         .legend-item { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-weight: 500; }
-        .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+        .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-        /* Secțiune Notițe (Vizibilă pe ecran) */
-        .notes-display-section { margin-top: 25px; border-top: 1px solid #1e293b; padding-top: 18px; }
-        .notes-display-section h3 { font-size: 0.95rem; color: #f1f5f9; font-weight: 700; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .notes-list { display: flex; flex-direction: column; gap: 8px; }
-        .note-card-item { background: #0f172a; border: 1px solid #1e293b; border-left: 4px solid #3b82f6; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
-        .note-card-empty { font-size: 0.82rem; color: #64748b; font-style: italic; }
+        /* Notițe PDF ascunse în modul web */
+        .pdf-notes-section { display: none; }
 
-        /* Modal Configurare Zi */
+        /* Fereastră Selecție (Modal Complex) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; }
         .modal-content { background: #0f172a; padding: 20px; border-radius: 16px; border: 1px solid #1e293b; width: 88%; max-width: 320px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .modal-title { margin-top: 0; font-size: 0.95rem; color: #f1f5f9; font-weight: 700; margin-bottom: 15px; text-align: center; }
@@ -108,6 +109,7 @@
         .modal-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
         .opt-btn { padding: 11px; border: none; border-radius: 10px; color: white; font-weight: 700; font-family: inherit; cursor: pointer; text-align: center; font-size: 0.88rem; }
         
+        /* Secțiune Notițe în Modal */
         .modal-notes-section { border-top: 1px solid #1e293b; padding-top: 12px; margin-top: 12px; }
         .extra-hours-input { width: 100%; background: #050505; border: 1px solid #1e293b; border-radius: 8px; padding: 10px; color: #fbbf24; font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; }
         .notes-label { font-size: 0.72rem; color: #64748b; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 6px; text-align: left; }
@@ -119,21 +121,123 @@
         .toast-notification { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #15803d; color: white; padding: 14px 20px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; text-align: center; width: 85%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s; opacity: 0; border: 1px solid #22c55e; }
         .toast-notification.show { bottom: 30px; opacity: 1; }
         
-        .print-only-title { display: none; }
+        .print-title { display: none; }
+
+        /* ========================================================= */
+        /* STIL OPTIMIZAT EXPORT PDF PE CONTAINER RESTRUCTURAT       */
+        /* ========================================================= */
+        #printableArea.generating-pdf { 
+            width: 740px !important; 
+            max-width: 740px !important; 
+            min-width: 740px !important; 
+            margin: 0 auto !important; 
+            padding: 25px 20px !important; 
+            background: #ffffff !important; 
+            color: #0f172a !important; 
+            box-sizing: border-box !important;
+            border-radius: 0 !important;
+        }
+
+        #printableArea.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 8px; }
+        #printableArea.generating-pdf .brand-logo { width: 34px !important; height: 34px !important; box-shadow: none !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        #printableArea.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.35rem !important; }
+        
+        #printableArea.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 20px; }
+        #printableArea.generating-pdf .print-title h1 { font-size: 1.5rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
+
+        /* Panou statistici extins în PDF */
+        #printableArea.generating-pdf .stats-grid { 
+            display: grid !important; 
+            grid-template-columns: repeat(4, 1fr) !important; 
+            margin-bottom: 22px !important; 
+            gap: 10px !important; 
+        }
+        #printableArea.generating-pdf .stat-card { 
+            background: #f8fafc !important; 
+            border: 1px solid #cbd5e1 !important; 
+            padding: 12px 10px !important; 
+            border-radius: 10px !important; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+        #printableArea.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.4rem !important; }
+        #printableArea.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.7rem !important; font-weight: 700 !important; }
+        #printableArea.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.68rem !important; }
+
+        /* Grilă Calendar Marită în PDF */
+        #printableArea.generating-pdf .calendar-grid { 
+            display: grid !important; 
+            grid-template-columns: repeat(7, 1fr) !important; 
+            gap: 8px !important;
+            margin-bottom: 22px !important;
+        }
+
+        /* Antet Zile Săptămână în PDF */
+        #printableArea.generating-pdf .header { 
+            display: flex !important; 
+            color: #ffffff !important; 
+            font-weight: 800 !important; 
+            background: #1e293b !important; 
+            border: 1px solid #0f172a !important; 
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0 !important;
+            font-size: 0.95rem !important;
+            border-radius: 8px !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
+        }
+
+        #printableArea.generating-pdf .day { 
+            border: 1px solid rgba(0,0,0,0.08) !important; 
+            font-size: 1.1rem !important; 
+            font-weight: 800 !important;
+            padding: 18px 0 !important; 
+            border-radius: 10px !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important; 
+        }
+        #printableArea.generating-pdf .day:empty { border: none !important; background: transparent !important; }
+
+        #printableArea.generating-pdf .legend { 
+            display: grid !important; 
+            grid-template-columns: repeat(3, 1fr) !important; 
+            border-top: 2px solid #e2e8f0 !important; 
+            margin-top: 20px !important; 
+            padding-top: 15px !important; 
+            gap: 10px !important;
+        }
+        #printableArea.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.9rem !important; display: flex !important; align-items: center; gap: 8px; }
+        #printableArea.generating-pdf .box { width: 14px !important; height: 14px !important; border-radius: 4px !important; }
+
+        /* Stil Notițe în PDF */
+        #printableArea.generating-pdf .pdf-notes-section { 
+            display: block !important; 
+            border-top: 2px solid #e2e8f0 !important; 
+            margin-top: 22px !important; 
+            padding-top: 15px !important; 
+            color: #0f172a !important; 
+            page-break-inside: avoid !important; 
+        }
+        #printableArea.generating-pdf .pdf-notes-section h3 { font-size: 1.05rem !important; margin-bottom: 10px !important; color: #0f172a !important; font-weight: 800 !important; }
+        
+        #printableArea.generating-pdf .pdf-note-card {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-left: 5px solid #3b82f6 !important;
+            padding: 10px 14px !important;
+            border-radius: 8px !important;
+            margin-bottom: 8px !important;
+            font-size: 0.88rem !important;
+            line-height: 1.4 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Selector Profil & Regim -->
-    <div class="brand-header">
-        <div class="brand-logo">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-            </svg>
-        </div>
-        <div class="brand-name">CalculTure Pro</div>
-    </div>
-
+    <!-- Selector Regim de Lucru & Grupa (Nu se includ în PDF) -->
     <div class="custom-select-container">
         <span class="profile-label">Regim de lucru selectat:</span>
         <div class="custom-select-trigger" onclick="toggleCustomSelect(event)">
@@ -175,15 +279,35 @@
         <button class="nav-btn" onclick="schimbaLuna(1)">»</button>
     </div>
 
-    <!-- ZONA PRINTABILĂ -->
-    <div id="exportArea">
-        
-        <div class="print-only-title" id="pdfTitleHeader" style="margin-bottom: 10px;">
-            <h2 id="titluPdfText" style="margin:0; font-size:1.2rem; font-weight:800; color:#0f172a;"></h2>
+    <!-- Bloc Acțiuni -->
+    <div class="actions-block">
+        <button class="action-btn btn-pdf" onclick="descargaPdf()">
+           📄 Descarcă Calendar PDF
+        </button>
+        <button class="action-btn btn-ics" onclick="exportaCalendar()" style="background: #15803d; border-color: #166534;">
+            📅 Exportă notițele în calendar
+        </button>
+    </div>
+
+    <!-- Containerul care este exportat direct în PDF -->
+    <div id="printableArea">
+        <!-- Logo Brand -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+            </div>
+            <div class="brand-name">CalculTure Pro</div>
+        </div>
+
+        <!-- Titlu Vizibil Doar în PDF -->
+        <div class="print-title">
+            <h1 id="titluPdf">Program Ture</h1>
         </div>
 
         <!-- Panou Statistici -->
-        <div class="stats-grid" id="statsContainer">
+        <div class="stats-grid">
             <div class="stat-card">
                 <span class="stat-val" id="statOre">0h</span>
                 <span class="stat-lbl">Ore Lucrate</span>
@@ -203,10 +327,10 @@
             </div>
         </div>
 
-        <!-- Grilă Calendar -->
+        <!-- Grila Calendar -->
         <div class="calendar-grid" id="calendar"></div>
 
-        <!-- Legendă -->
+        <!-- Legendă Dinamică -->
         <div class="legend" id="legendContainer">
             <div class="legend-item" data-shift="L"><div class="box" style="background:#007bff"></div> Liber</div>
             <div class="legend-item" data-shift="S1"><div class="box" style="background:#28a745"></div> Schimb 1</div>
@@ -216,22 +340,8 @@
             <div class="legend-item" data-shift="12N"><div class="box" style="background:#e83e8c"></div> 12h Noapte</div>
         </div>
 
-        <!-- Notițe și Ore Suplimentare -->
-        <div class="notes-display-section" id="notesDisplaySection">
-            <h3>📝 Notițe și Ore Suplimentare</h3>
-            <div class="notes-list" id="notesListContainer"></div>
-        </div>
-
-    </div>
-
-    <!-- Acțiuni -->
-    <div class="actions-block" style="margin-top: 25px;">
-        <button class="action-btn btn-pdf" onclick="descargaPdf()">
-           📥 Descarcă Calendar PDF
-        </button>
-        <button class="action-btn btn-ics" onclick="exportaCalendar()" style="background: #15803d; border-color: #166534;">
-            📅 Exportă notițele în calendar
-        </button>
+        <!-- Container Notițe PDF -->
+        <div id="pdfNotesContainer" class="pdf-notes-section"></div>
     </div>
 
     <!-- Modal Configurare Zi -->
@@ -320,11 +430,11 @@
 
         function genCalendar() {
             const container = document.getElementById('calendar');
-            const notesListContainer = document.getElementById('notesListContainer');
+            const pdfNotes = document.getElementById('pdfNotesContainer');
             
             container.innerHTML = '<div class="day header">Lu</div><div class="day header">Ma</div><div class="day header">Mi</div><div class="day header">Jo</div><div class="day header">Vi</div><div class="day header">Sâ</div><div class="day header">Du</div>';
-            notesListContainer.innerHTML = '';
-
+            pdfNotes.innerHTML = '<h3>Notițe și Ore Suplimentare:</h3>';
+            
             let textLunaAn = dataCurenta.toLocaleDateString('ro-RO', {month: 'long', year: 'numeric'});
             document.getElementById('lunaAn').innerText = textLunaAn;
             
@@ -338,7 +448,7 @@
 
             let tureFolosite = new Set();
             let oreLucrate = 0, zileMunca = 0, noptiMunca = 0, zileLibere = 0;
-            let areNotiteAdaugate = false;
+            let areNotiteLunix = false;
 
             for(let i=1; i<=zileLuna; i++) {
                 let curr = new Date(dataCurenta.getFullYear(), dataCurenta.getMonth(), i);
@@ -362,18 +472,13 @@
                     cod = zileCiclu[ciclu];
                 }
                 
-                // Construire Notițe
                 if (extra > 0 || notaText) {
-                    areNotiteAdaugate = true;
-                    let infoExtra = extra > 0 ? `<strong style="color: #fbbf24;">+${extra}h suplimentare</strong>` : '';
+                    areNotiteLunix = true;
+                    let infoExtra = extra > 0 ? `<strong style="color: #d97706;">+${extra}h suplimentare</strong>` : '';
                     let separare = (extra > 0 && notaText) ? ' — ' : '';
-                    let textFinal = notaText ? `<span>${notaText}</span>` : '';
+                    let formatNota = notaText ? `<span>${notaText}</span>` : '';
                     
-                    notesListContainer.innerHTML += `
-                        <div class="note-card-item">
-                            <strong style="color: #f1f5f9;">Ziua ${i} (${curr.toLocaleDateString('ro-RO', {weekday: 'short'})}):</strong> 
-                            ${infoExtra}${separare}${textFinal}
-                        </div>`;
+                    pdfNotes.innerHTML += `<div class="pdf-note-card"><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}.:</b> ${infoExtra}${separare}${formatNota}</div>`;
                 }
 
                 if (cod) tureFolosite.add(cod);
@@ -387,20 +492,23 @@
 
                 let css = shiftClasses[cod] || "liber";
                 let stilAzi = (curr.toDateString() === azi.toDateString()) ? "outline: 2px solid white; outline-offset: -2px;" : "";
-                let areNota = (exceptiiZile[keyExcepție] && (exceptiiZile[keyExcepție].nota || exceptiiZile[keyExcepție].extra)) ? '<div class="note-indicator"></div>' : '';
+                let areNota = (exceptiiZile[keyExcepție] && exceptiiZile[keyExcepție].nota) ? '<div class="note-indicator"></div>' : '';
                 
                 container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${rawDateStr}', ${i})">${i}${areNota}</div>`;
             }
 
-            if(!areNotiteAdaugate) {
-                notesListContainer.innerHTML = '<div class="note-card-empty">Nu există notițe sau ore suplimentare adăugate în această lună.</div>';
+            if(!areNotiteLunix) {
+                pdfNotes.innerHTML += '<p style="color: #64748b; font-style: italic; font-size: 0.88rem; margin-top: 5px;">Nu există notițe sau ore suplimentare planificate în această lună.</p>';
             }
 
             let zileLucratoareNormale = calculeazaZileLucratoareLuna(dataCurenta.getFullYear(), dataCurenta.getMonth());
             let normaOreLuna = zileLucratoareNormale * 8;
+            
             let balanzaOre = oreLucrate - normaOreLuna;
             
-            if (profilCurent === 'p1') balanzaOre -= 1;
+            if (profilCurent === 'p1') {
+                balanzaOre -= 1;
+            }
             
             let textBalanza = balanzaOre >= 0 ? `+${balanzaOre}h` : `${balanzaOre}h`;
             let culoareBalanza = balanzaOre >= 0 ? '#22c55e' : '#ef4444';
@@ -504,129 +612,44 @@
             setTimeout(() => { toast.classList.remove('show'); }, 4000);
         }
         
-        /* EXPORT PDF OPTIMIZAT PE O SINGURĂ PAGINĂ A4 */
         async function descargaPdf() {
             genCalendar();
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
+            document.getElementById('titluPdf').innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
             
-            // 1. Clonăm zona de calendar
-            const original = document.getElementById('exportArea');
-            const clone = original.cloneNode(true);
+            const element = document.getElementById('printableArea');
+            element.classList.add('generating-pdf');
 
-            // 2. Dimensiuni compacte pentru clonă ca să încapă garantat pe 1 pagină A4
-            clone.style.width = '700px';
-            clone.style.padding = '15px';
-            clone.style.background = '#ffffff';
-            clone.style.color = '#0f172a';
-            clone.style.position = 'absolute';
-            clone.style.left = '-9999px';
-            clone.style.top = '0';
-            clone.style.boxSizing = 'border-box';
+            // Resetăm temporar scroll-ul pentru ca html2canvas să nu taie din partea superioară a PDF-ului
+            const prevScrollY = window.scrollY;
+            window.scrollTo(0, 0);
 
-            // Titlu PDF
-            const pdfTitleHeader = clone.querySelector('#pdfTitleHeader');
-            const pdfTitleText = clone.querySelector('#titluPdfText');
-            if (pdfTitleHeader && pdfTitleText) {
-                pdfTitleHeader.style.display = 'block';
-                pdfTitleHeader.style.marginBottom = '8px';
-                pdfTitleText.innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
-                pdfTitleText.style.fontSize = '1.15rem';
-            }
-
-            // Compactare Statistici
-            const statsContainer = clone.querySelector('#statsContainer');
-            if (statsContainer) {
-                statsContainer.style.gap = '6px';
-                statsContainer.style.marginBottom = '10px';
-            }
-            clone.querySelectorAll('.stat-card').forEach(c => {
-                c.style.padding = '6px 8px';
-                c.style.background = '#f8fafc';
-                c.style.borderColor = '#cbd5e1';
-                c.style.color = '#0f172a';
-            });
-            clone.querySelectorAll('.stat-val').forEach(v => {
-                v.style.fontSize = '1.1rem';
-                v.style.color = '#0f172a';
-            });
-            clone.querySelectorAll('.stat-lbl').forEach(l => {
-                l.style.fontSize = '0.65rem';
-                l.style.color = '#475569';
-            });
-            clone.querySelectorAll('.stat-sub').forEach(s => {
-                s.style.fontSize = '0.62rem';
-                s.style.color = '#334155';
-            });
-
-            // Compactare Grilă Calendar
-            const calGrid = clone.querySelector('#calendar');
-            if (calGrid) calGrid.style.gap = '4px';
-            clone.querySelectorAll('.day').forEach(d => {
-                d.style.padding = '6px 0';
-                d.style.fontSize = '0.85rem';
-                d.style.fontWeight = '700';
-                d.style.borderRadius = '6px';
-            });
-
-            // Compactare Legendă
-            const legend = clone.querySelector('#legendContainer');
-            if (legend) {
-                legend.style.marginTop = '10px';
-                legend.style.paddingTop = '8px';
-                legend.style.gap = '6px';
-            }
-            clone.querySelectorAll('.legend-item').forEach(l => {
-                l.style.color = '#0f172a';
-                l.style.fontSize = '0.75rem';
-            });
-
-            // Compactare Notițe (pentru a încape direct sub calendar)
-            const notesSection = clone.querySelector('.notes-display-section');
-            if (notesSection) {
-                notesSection.style.marginTop = '12px';
-                notesSection.style.paddingTop = '8px';
-                notesSection.style.borderTop = '2px solid #cbd5e1';
-                const h3 = notesSection.querySelector('h3');
-                if (h3) {
-                    h3.style.fontSize = '0.85rem';
-                    h3.style.marginBottom = '6px';
-                    h3.style.color = '#0f172a';
-                }
-            }
-            const notesList = clone.querySelector('#notesListContainer');
-            if (notesList) notesList.style.gap = '4px';
-
-            clone.querySelectorAll('.note-card-item').forEach(n => {
-                n.style.padding = '5px 8px';
-                n.style.fontSize = '0.75rem';
-                n.style.background = '#f8fafc';
-                n.style.borderColor = '#cbd5e1';
-                n.style.borderLeft = '3px solid #3b82f6';
-                n.style.color = '#0f172a';
-                n.querySelectorAll('strong').forEach(str => {
-                    if (str.innerText.includes('Ziua')) str.style.color = '#0f172a';
-                    else str.style.color = '#d97706';
-                });
-            });
-
-            document.body.appendChild(clone);
-
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
             const opt = {
                 margin:       [4, 4, 4, 4],
                 filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    scrollY: 0, 
+                    scrollX: 0,
+                    windowWidth: 760, 
+                    backgroundColor: '#ffffff' 
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
             };
-
+            
             try {
-                await html2pdf().set(opt).from(clone).save();
-                showToast("📄 PDF descărcat pe o singură pagină!");
+                await html2pdf().set(opt).from(element).save();
+                showToast("📄 PDF descărcat cu succes!");
             } catch (err) {
-                console.error("Eroare PDF:", err);
-                showToast("❌ Eroare la generarea PDF-ului");
+                console.error("Eroare generare PDF:", err);
             } finally {
-                document.body.removeChild(clone);
+                element.classList.remove('generating-pdf');
+                window.scrollTo(0, prevScrollY);
             }
         }
 
