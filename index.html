@@ -64,7 +64,7 @@
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; position: relative; }
         .day { padding: 14px 0; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; cursor: pointer; user-select: none; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        /* Antet Zile Săptămână (Actualizat pentru Vizibilitate Maximă) */
+        /* Antet Zile Săptămână */
         .header { 
             font-weight: 800; 
             color: #ffffff; 
@@ -119,14 +119,14 @@
         .print-title { display: none; }
 
         /* ========================================================= */
-        /* STIL EXPORT PDF RESTRUCTURAT PE TOATĂ PAGINA A4 */
+        /* STIL EXPORT PDF OPTIMIZAT PE O SINGURĂ PAGINĂ A4 */
         /* ========================================================= */
         body.generating-pdf { 
             width: 780px !important; 
             max-width: 780px !important; 
             min-width: 780px !important; 
             margin: 0 auto !important; 
-            padding: 30px 25px !important; 
+            padding: 20px 25px !important; 
             background: #ffffff !important; 
             color: #0f172a !important; 
             box-sizing: border-box !important;
@@ -138,39 +138,39 @@
         body.generating-pdf .toast-notification,
         body.generating-pdf .modal-overlay { display: none !important; }
 
-        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 8px; }
-        body.generating-pdf .brand-logo { width: 36px !important; height: 36px !important; box-shadow: none !important; }
-        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.4rem !important; }
+        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 6px; }
+        body.generating-pdf .brand-logo { width: 32px !important; height: 32px !important; box-shadow: none !important; }
+        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.3rem !important; }
         
-        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 25px; }
-        body.generating-pdf .print-title h1 { font-size: 1.65rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
+        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 16px; }
+        body.generating-pdf .print-title h1 { font-size: 1.5rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
 
         /* Panou statistici extins în PDF */
         body.generating-pdf .stats-grid { 
             display: grid !important; 
             grid-template-columns: repeat(4, 1fr) !important; 
-            margin-bottom: 28px !important; 
-            gap: 14px !important; 
+            margin-bottom: 16px !important; 
+            gap: 10px !important; 
         }
         body.generating-pdf .stat-card { 
             background: #f8fafc !important; 
             border: 1px solid #cbd5e1 !important; 
-            padding: 14px 12px !important; 
-            border-radius: 12px !important; 
+            padding: 10px 12px !important; 
+            border-radius: 10px !important; 
         }
-        body.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.55rem !important; }
-        body.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.75rem !important; font-weight: 700 !important; }
-        body.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.72rem !important; }
+        body.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.35rem !important; }
+        body.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.72rem !important; font-weight: 700 !important; }
+        body.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.68rem !important; }
 
         /* Grilă Calendar Marită în PDF */
         body.generating-pdf .calendar-grid { 
             display: grid !important; 
             grid-template-columns: repeat(7, 1fr) !important; 
-            gap: 10px !important;
-            margin-bottom: 28px !important;
+            gap: 6px !important;
+            margin-bottom: 16px !important;
         }
 
-        /* Antet Zile Săptămână în PDF (Actualizat Contrast) */
+        /* Antet Zile Săptămână în PDF */
         body.generating-pdf .header { 
             display: flex !important; 
             color: #ffffff !important; 
@@ -179,9 +179,9 @@
             border: 1px solid #0f172a !important; 
             justify-content: center;
             align-items: center;
-            padding: 12px 0 !important;
-            font-size: 1.05rem !important;
-            border-radius: 8px !important;
+            padding: 8px 0 !important;
+            font-size: 0.95rem !important;
+            border-radius: 6px !important;
             -webkit-print-color-adjust: exact !important; 
             print-color-adjust: exact !important;
         }
@@ -189,10 +189,10 @@
         body.generating-pdf .day { 
             border: 1px solid rgba(0,0,0,0.08) !important; 
             color: white !important; 
-            font-size: 1.2rem !important; 
+            font-size: 1.05rem !important; 
             font-weight: 800 !important;
-            padding: 22px 0 !important; 
-            border-radius: 10px !important;
+            padding: 12px 0 !important; 
+            border-radius: 8px !important;
             -webkit-print-color-adjust: exact !important; 
             print-color-adjust: exact !important; 
         }
@@ -202,33 +202,32 @@
             display: grid !important; 
             grid-template-columns: repeat(3, 1fr) !important; 
             border-top: 2px solid #e2e8f0 !important; 
-            margin-top: 25px !important; 
-            padding-top: 20px !important; 
-            gap: 14px !important;
+            margin-top: 14px !important; 
+            padding-top: 12px !important; 
+            gap: 10px !important;
         }
-        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.95rem !important; display: flex !important; align-items: center; gap: 10px; }
-        body.generating-pdf .box { width: 16px !important; height: 16px !important; border-radius: 4px !important; }
+        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.88rem !important; display: flex !important; align-items: center; gap: 8px; }
+        body.generating-pdf .box { width: 14px !important; height: 14px !important; border-radius: 4px !important; }
 
-        /* Stil Notițe în PDF */
+        /* Stil Notițe în PDF (Afișate Garantat) */
         body.generating-pdf .pdf-notes-section { 
             display: block !important; 
-            border-top: 2px solid #e2e8f0 !important; 
-            margin-top: 28px !important; 
-            padding-top: 20px !important; 
+            border-top: 2px solid #cbd5e1 !important; 
+            margin-top: 18px !important; 
+            padding-top: 14px !important; 
             color: #0f172a !important; 
-            page-break-inside: avoid !important; 
         }
-        body.generating-pdf .pdf-notes-section h3 { font-size: 1.15rem !important; margin-bottom: 12px !important; color: #0f172a !important; font-weight: 800 !important; }
+        body.generating-pdf .pdf-notes-section h3 { font-size: 1.05rem !important; margin-top: 0 !important; margin-bottom: 10px !important; color: #0f172a !important; font-weight: 800 !important; }
         
         body.generating-pdf .pdf-note-card {
             background: #f8fafc !important;
             border: 1px solid #cbd5e1 !important;
             border-left: 5px solid #3b82f6 !important;
-            padding: 12px 16px !important;
-            border-radius: 10px !important;
-            margin-bottom: 10px !important;
-            font-size: 0.95rem !important;
-            line-height: 1.5 !important;
+            padding: 10px 14px !important;
+            border-radius: 8px !important;
+            margin-bottom: 8px !important;
+            font-size: 0.9rem !important;
+            line-height: 1.4 !important;
         }
     </style>
 </head>
@@ -487,7 +486,7 @@
 
                 let css = shiftClasses[cod] || "liber";
                 let stilAzi = (curr.toDateString() === azi.toDateString()) ? "outline: 2px solid white; outline-offset: -2px;" : "";
-                let areNota = (exceptiiZile[keyExcepție] && exceptiiZile[keyExcepție].nota) ? '<div class="note-indicator"></div>' : '';
+                let areNota = (exceptiiZile[keyExcepție] && (exceptiiZile[keyExcepție].nota || exceptiiZile[keyExcepție].extra)) ? '<div class="note-indicator"></div>' : '';
                 
                 container.innerHTML += `<div class="day ${css}" style="${stilAzi}" onclick="deschideModal('${rawDateStr}', ${i})">${i}${areNota}</div>`;
             }
@@ -620,8 +619,9 @@
                 margin:       [5, 5, 5, 5],
                 filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, windowWidth: 800, backgroundColor: '#ffffff' },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 800, backgroundColor: '#ffffff', scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['css', 'legacy'] }
             };
             
             try {
