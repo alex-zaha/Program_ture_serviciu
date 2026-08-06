@@ -106,8 +106,19 @@
         
         .print-title { display: none; }
 
-        /* STIL EXPORT PDF AUTOMAT */
-        body.generating-pdf { background: white !important; color: black !important; padding: 15mm !important; }
+        /* ========================================================= */
+        /* STIL EXPORT PDF OPTIMIZAT PE TOATĂ PAGINA A4 */
+        /* ========================================================= */
+        body.generating-pdf { 
+            width: 794px !important; 
+            max-width: 794px !important; 
+            min-width: 794px !important; 
+            margin: 0 auto !important; 
+            padding: 25px !important; 
+            background: #ffffff !important; 
+            color: #0f172a !important; 
+            box-sizing: border-box !important;
+        }
 
         body.generating-pdf .nav-bar, 
         body.generating-pdf .custom-select-container,
@@ -115,58 +126,94 @@
         body.generating-pdf .toast-notification,
         body.generating-pdf .modal-overlay { display: none !important; }
 
+        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
+        body.generating-pdf .brand-logo { box-shadow: none !important; }
+        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; font-size: 1.3rem !important; }
+        
+        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 20px; }
+        body.generating-pdf .print-title h1 { font-size: 1.5rem !important; font-weight: 800 !important; color: #0f172a !important; margin: 0; text-transform: capitalize; }
+
+        /* Panou statistici orizontal pe 4 coloane în PDF */
+        body.generating-pdf .stats-grid { 
+            display: grid !important; 
+            grid-template-columns: repeat(4, 1fr) !important; 
+            margin-bottom: 25px !important; 
+            gap: 12px !important; 
+        }
+        body.generating-pdf .stat-card { 
+            background: #f8fafc !important; 
+            border: 1px solid #cbd5e1 !important; 
+            padding: 12px !important; 
+            border-radius: 10px !important; 
+        }
+        body.generating-pdf .stat-val { color: #0f172a !important; font-size: 1.4rem !important; }
+        body.generating-pdf .stat-lbl { color: #475569 !important; font-size: 0.72rem !important; font-weight: 700 !important; }
+        body.generating-pdf .stat-sub { color: #334155 !important; font-size: 0.7rem !important; }
+
+        /* Grilă Calendar Marită în PDF */
         body.generating-pdf .calendar-grid { 
             display: grid !important; 
             grid-template-columns: repeat(7, 1fr) !important; 
+            gap: 8px !important;
+            margin-bottom: 20px !important;
         }
 
         body.generating-pdf .header { 
             display: flex !important; 
-            color: #000000 !important; 
-            font-weight: 900 !important; 
-            background: #f1f5f9 !important; 
-            border: 1px solid #e2e8f0 !important; 
+            color: #0f172a !important; 
+            font-weight: 800 !important; 
+            background: #e2e8f0 !important; 
+            border: 1px solid #cbd5e1 !important; 
             justify-content: center;
             align-items: center;
             padding: 10px 0 !important;
+            font-size: 0.95rem !important;
+            border-radius: 6px !important;
         }
 
-        body.generating-pdf .brand-header { justify-content: flex-start; margin-bottom: 5px; }
-        body.generating-pdf .brand-logo { box-shadow: none !important; }
-        body.generating-pdf .brand-name { background: none !important; -webkit-text-fill-color: #0f172a !important; color: #0f172a !important; }
-        body.generating-pdf .print-title { display: block !important; text-align: left; margin-bottom: 15px; }
-        body.generating-pdf .print-title h1 { font-size: 1.3rem; font-weight: 800; color: black; margin: 0; }
-
-        body.generating-pdf .stats-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; margin-bottom: 20px; gap: 15px; }
-        body.generating-pdf .stat-card { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
-        body.generating-pdf .stat-val { color: #0f172a !important; }
-        body.generating-pdf .stat-lbl { color: #64748b !important; }
-        body.generating-pdf .stat-sub { color: #475569 !important; }
-
         body.generating-pdf .day { 
-            border: 1px solid #e2e8f0 !important; 
-            color: black !important; 
-            font-size: 0.85rem; 
-            padding: 10px 0; 
-            -webkit-print-color-adjust: exact; 
-            print-color-adjust: exact; 
+            border: 1px solid rgba(0,0,0,0.08) !important; 
+            color: white !important; 
+            font-size: 1.05rem !important; 
+            font-weight: 700 !important;
+            padding: 16px 0 !important; 
+            border-radius: 8px !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important; 
         }
         body.generating-pdf .day:empty { border: none !important; background: transparent !important; }
 
-        body.generating-pdf .legend { display: grid !important; grid-template-columns: 1fr 1fr !important; border-top: 2px solid #e2e8f0 !important; margin-top: 20px !important; padding-top: 15px !important; }
-        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; display: flex !important; align-items: center; gap: 10px; }
-
-        body.generating-pdf .pdf-notes-section { 
-            display: block !important; 
+        body.generating-pdf .legend { 
+            display: grid !important; 
+            grid-template-columns: repeat(3, 1fr) !important; 
             border-top: 2px solid #e2e8f0 !important; 
             margin-top: 20px !important; 
             padding-top: 15px !important; 
+            gap: 12px !important;
+        }
+        body.generating-pdf .legend-item { color: #0f172a !important; font-weight: 700 !important; font-size: 0.9rem !important; display: flex !important; align-items: center; gap: 8px; }
+
+        /* Stil Notițe în PDF */
+        body.generating-pdf .pdf-notes-section { 
+            display: block !important; 
+            border-top: 2px solid #e2e8f0 !important; 
+            margin-top: 25px !important; 
+            padding-top: 15px !important; 
             color: #0f172a !important; 
-            font-size: 0.85rem !important; 
             page-break-inside: avoid !important; 
         }
-        body.generating-pdf .pdf-notes-section h3 { font-size: 1rem; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
-        body.generating-pdf .pdf-notes-section p { margin: 6px 0; padding-bottom: 6px; border-bottom: 1px dashed #cbd5e1; }
+        body.generating-pdf .pdf-notes-section h3 { font-size: 1.1rem !important; margin-bottom: 12px !important; color: #0f172a !important; font-weight: 800 !important; }
+        
+        body.generating-pdf .pdf-note-card {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-left: 4px solid #3b82f6 !important;
+            padding: 10px 14px !important;
+            border-radius: 8px !important;
+            margin-bottom: 8px !important;
+            font-size: 0.9rem !important;
+            line-height: 1.4 !important;
+        }
     </style>
 </head>
 <body>
@@ -328,7 +375,6 @@
         let profilCurent = localStorage.getItem('activeProfile') || 'p1';
         let zileCiclu = JSON.parse(localStorage.getItem('pattern_' + profilCurent)) || profiluri[profilCurent].implicit;
         
-        // Decalaj Grupe: A (0), B (+21 de zile -> echivalent -7 zile / 1 sapt inapoi), C (+14), D (+7)
         let grupaCurenta = localStorage.getItem('activeGroup') || 'A';
         const decalajGrupe = { 'A': 0, 'B': 21, 'C': 14, 'D': 7 };
 
@@ -407,9 +453,11 @@
                 
                 if (extra > 0 || notaText) {
                     areNotiteLunix = true;
-                    let infoExtra = extra > 0 ? `<strong>+${extra}h suplimentare</strong>` : '';
-                    let separare = (extra > 0 && notaText) ? ' | ' : '';
-                    pdfNotes.innerHTML += `<p><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}:</b> ${infoExtra}${separare}${notaText}</p>`;
+                    let infoExtra = extra > 0 ? `<strong style="color: #d97706;">+${extra}h suplimentare</strong>` : '';
+                    let separare = (extra > 0 && notaText) ? ' — ' : '';
+                    let formatNota = notaText ? `<span>${notaText}</span>` : '';
+                    
+                    pdfNotes.innerHTML += `<div class="pdf-note-card"><b>${i} ${dataCurenta.toLocaleDateString('ro-RO', {month:'short'})}:</b> ${infoExtra}${separare}${formatNota}</div>`;
                 }
 
                 if (cod) tureFolosite.add(cod);
@@ -429,7 +477,7 @@
             }
 
             if(!areNotiteLunix) {
-                pdfNotes.innerHTML += '<p>Nu există notițe sau ore suplimentare planificate în această lună.</p>';
+                pdfNotes.innerHTML += '<p style="color: #64748b; font-style: italic; font-size: 0.88rem; margin-top: 5px;">Nu există notițe sau ore suplimentare planificate în această lună.</p>';
             }
 
             let zileLucratoareNormale = calculeazaZileLucratoareLuna(dataCurenta.getFullYear(), dataCurenta.getMonth());
@@ -437,7 +485,6 @@
             
             let balanzaOre = oreLucrate - normaOreLuna;
             
-            // Regula de -1h la balanță pentru profilul p1 (Grafic Continuu)
             if (profilCurent === 'p1') {
                 balanzaOre -= 1;
             }
@@ -550,14 +597,14 @@
             document.getElementById('titluPdf').innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
             
             document.body.classList.add('generating-pdf');
-            await new Promise(resolve => setTimeout(resolve, 150));
+            await new Promise(resolve => setTimeout(resolve, 250));
             
             const element = document.body;
             const opt = {
-                margin:       [10, 10, 10, 10],
+                margin:       [8, 8, 8, 8],
                 filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(' ', '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 800, backgroundColor: '#ffffff' },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
