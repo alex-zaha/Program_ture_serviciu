@@ -63,7 +63,19 @@
         /* Calendar */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; position: relative; }
         .day { padding: 14px 0; border-radius: 12px; text-align: center; font-weight: 600; font-size: 0.95rem; cursor: pointer; user-select: none; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .header { font-weight: 700; color: #64748b; background: transparent; cursor: default; padding: 5px 0; font-size: 0.85rem; }
+        
+        /* Antet Zile Săptămână (Actualizat pentru Vizibilitate Maximă) */
+        .header { 
+            font-weight: 800; 
+            color: #ffffff; 
+            background: #1e293b; 
+            border: 1px solid #334155;
+            border-radius: 8px;
+            cursor: default; 
+            padding: 8px 0; 
+            font-size: 0.85rem; 
+            text-align: center;
+        }
         
         /* Indicator punct luminos pentru Notițe */
         .note-indicator { width: 4px; height: 4px; background-color: #22c55e; border-radius: 50%; position: absolute; bottom: 4px; box-shadow: 0 0 6px #22c55e; }
@@ -158,17 +170,20 @@
             margin-bottom: 28px !important;
         }
 
+        /* Antet Zile Săptămână în PDF (Actualizat Contrast) */
         body.generating-pdf .header { 
             display: flex !important; 
-            color: #0f172a !important; 
+            color: #ffffff !important; 
             font-weight: 800 !important; 
-            background: #e2e8f0 !important; 
-            border: 1px solid #cbd5e1 !important; 
+            background: #1e293b !important; 
+            border: 1px solid #0f172a !important; 
             justify-content: center;
             align-items: center;
             padding: 12px 0 !important;
             font-size: 1.05rem !important;
             border-radius: 8px !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
         }
 
         body.generating-pdf .day { 
