@@ -93,7 +93,7 @@
         .legend-item { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-weight: 500; }
         .box { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
 
-        /* Secțiune Notițe (Vizibilă permanent pe ecran) */
+        /* Secțiune Notițe (Vizibilă pe ecran) */
         .notes-display-section { margin-top: 25px; border-top: 1px solid #1e293b; padding-top: 18px; }
         .notes-display-section h3 { font-size: 0.95rem; color: #f1f5f9; font-weight: 700; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .notes-list { display: flex; flex-direction: column; gap: 8px; }
@@ -175,11 +175,11 @@
         <button class="nav-btn" onclick="schimbaLuna(1)">»</button>
     </div>
 
-    <!-- ZONA PRINTABILĂ (Exportată în PDF) -->
+    <!-- ZONA PRINTABILĂ -->
     <div id="exportArea">
         
-        <div class="print-only-title" id="pdfTitleHeader" style="margin-bottom: 15px;">
-            <h2 id="titluPdfText" style="margin:0; font-size:1.4rem; font-weight:800; color:#0f172a;"></h2>
+        <div class="print-only-title" id="pdfTitleHeader" style="margin-bottom: 10px;">
+            <h2 id="titluPdfText" style="margin:0; font-size:1.2rem; font-weight:800; color:#0f172a;"></h2>
         </div>
 
         <!-- Panou Statistici -->
@@ -216,7 +216,7 @@
             <div class="legend-item" data-shift="12N"><div class="box" style="background:#e83e8c"></div> 12h Noapte</div>
         </div>
 
-        <!-- Notițe și Ore Suplimentare (Afișate pe ecran și în PDF) -->
+        <!-- Notițe și Ore Suplimentare -->
         <div class="notes-display-section" id="notesDisplaySection">
             <h3>📝 Notițe și Ore Suplimentare</h3>
             <div class="notes-list" id="notesListContainer"></div>
@@ -371,7 +371,7 @@
                     
                     notesListContainer.innerHTML += `
                         <div class="note-card-item">
-                            <strong style="color: #f1f5f9;">Ziua ${i} (${dataCurenta.toLocaleDateString('ro-RO', {weekday: 'short'})}):</strong> 
+                            <strong style="color: #f1f5f9;">Ziua ${i} (${curr.toLocaleDateString('ro-RO', {weekday: 'short'})}):</strong> 
                             ${infoExtra}${separare}${textFinal}
                         </div>`;
                 }
@@ -504,7 +504,7 @@
             setTimeout(() => { toast.classList.remove('show'); }, 4000);
         }
         
-        /* EXPORT PDF PRIN CLONARE IZOLATĂ GARANTATĂ */
+        /* EXPORT PDF OPTIMIZAT PE O SINGURĂ PAGINĂ A4 */
         async function descargaPdf() {
             genCalendar();
             let numeLuna = dataCurenta.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
@@ -513,9 +513,9 @@
             const original = document.getElementById('exportArea');
             const clone = original.cloneNode(true);
 
-            // 2. Aplicăm stil de fundal alb și culori contrastante pe clonă
-            clone.style.width = '740px';
-            clone.style.padding = '25px';
+            // 2. Dimensiuni compacte pentru clonă ca să încapă garantat pe 1 pagină A4
+            clone.style.width = '700px';
+            clone.style.padding = '15px';
             clone.style.background = '#ffffff';
             clone.style.color = '#0f172a';
             clone.style.position = 'absolute';
@@ -523,53 +523,96 @@
             clone.style.top = '0';
             clone.style.boxSizing = 'border-box';
 
-            // Afișăm titlul în PDF
+            // Titlu PDF
             const pdfTitleHeader = clone.querySelector('#pdfTitleHeader');
             const pdfTitleText = clone.querySelector('#titluPdfText');
             if (pdfTitleHeader && pdfTitleText) {
                 pdfTitleHeader.style.display = 'block';
+                pdfTitleHeader.style.marginBottom = '8px';
                 pdfTitleText.innerText = `Program Ture (Grupa ${grupaCurenta}) • ${numeLuna}`;
+                pdfTitleText.style.fontSize = '1.15rem';
             }
 
-            // Adaptăm cardurile de statistici pentru print alb
+            // Compactare Statistici
+            const statsContainer = clone.querySelector('#statsContainer');
+            if (statsContainer) {
+                statsContainer.style.gap = '6px';
+                statsContainer.style.marginBottom = '10px';
+            }
             clone.querySelectorAll('.stat-card').forEach(c => {
+                c.style.padding = '6px 8px';
                 c.style.background = '#f8fafc';
                 c.style.borderColor = '#cbd5e1';
                 c.style.color = '#0f172a';
             });
-            clone.querySelectorAll('.stat-val').forEach(v => v.style.color = '#0f172a');
-            clone.querySelectorAll('.stat-lbl').forEach(l => l.style.color = '#475569');
-            clone.querySelectorAll('.stat-sub').forEach(s => s.style.color = '#334155');
-            clone.querySelectorAll('.legend-item').forEach(l => l.style.color = '#0f172a');
+            clone.querySelectorAll('.stat-val').forEach(v => {
+                v.style.fontSize = '1.1rem';
+                v.style.color = '#0f172a';
+            });
+            clone.querySelectorAll('.stat-lbl').forEach(l => {
+                l.style.fontSize = '0.65rem';
+                l.style.color = '#475569';
+            });
+            clone.querySelectorAll('.stat-sub').forEach(s => {
+                s.style.fontSize = '0.62rem';
+                s.style.color = '#334155';
+            });
 
-            // Adaptăm notițele pentru print alb
+            // Compactare Grilă Calendar
+            const calGrid = clone.querySelector('#calendar');
+            if (calGrid) calGrid.style.gap = '4px';
+            clone.querySelectorAll('.day').forEach(d => {
+                d.style.padding = '6px 0';
+                d.style.fontSize = '0.85rem';
+                d.style.fontWeight = '700';
+                d.style.borderRadius = '6px';
+            });
+
+            // Compactare Legendă
+            const legend = clone.querySelector('#legendContainer');
+            if (legend) {
+                legend.style.marginTop = '10px';
+                legend.style.paddingTop = '8px';
+                legend.style.gap = '6px';
+            }
+            clone.querySelectorAll('.legend-item').forEach(l => {
+                l.style.color = '#0f172a';
+                l.style.fontSize = '0.75rem';
+            });
+
+            // Compactare Notițe (pentru a încape direct sub calendar)
             const notesSection = clone.querySelector('.notes-display-section');
             if (notesSection) {
+                notesSection.style.marginTop = '12px';
+                notesSection.style.paddingTop = '8px';
                 notesSection.style.borderTop = '2px solid #cbd5e1';
-                notesSection.querySelector('h3').style.color = '#0f172a';
+                const h3 = notesSection.querySelector('h3');
+                if (h3) {
+                    h3.style.fontSize = '0.85rem';
+                    h3.style.marginBottom = '6px';
+                    h3.style.color = '#0f172a';
+                }
             }
+            const notesList = clone.querySelector('#notesListContainer');
+            if (notesList) notesList.style.gap = '4px';
+
             clone.querySelectorAll('.note-card-item').forEach(n => {
+                n.style.padding = '5px 8px';
+                n.style.fontSize = '0.75rem';
                 n.style.background = '#f8fafc';
                 n.style.borderColor = '#cbd5e1';
-                n.style.borderLeft = '4px solid #3b82f6';
+                n.style.borderLeft = '3px solid #3b82f6';
                 n.style.color = '#0f172a';
                 n.querySelectorAll('strong').forEach(str => {
                     if (str.innerText.includes('Ziua')) str.style.color = '#0f172a';
-                    else str.style.color = '#d97706'; // Ore suplimentare mai vizibile pe alb
+                    else str.style.color = '#d97706';
                 });
-            });
-
-            // Ajustăm dimensiunile casetelor de calendar pe clonă
-            clone.querySelectorAll('.day').forEach(d => {
-                d.style.padding = '10px 0';
-                d.style.fontSize = '1rem';
-                d.style.fontWeight = '700';
             });
 
             document.body.appendChild(clone);
 
             const opt = {
-                margin:       [6, 6, 6, 6],
+                margin:       [4, 4, 4, 4],
                 filename:     `Grafic_Ture_Grupa_${grupaCurenta}_${numeLuna.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, logging: false },
@@ -578,7 +621,7 @@
 
             try {
                 await html2pdf().set(opt).from(clone).save();
-                showToast("📄 PDF descărcat cu succes!");
+                showToast("📄 PDF descărcat pe o singură pagină!");
             } catch (err) {
                 console.error("Eroare PDF:", err);
                 showToast("❌ Eroare la generarea PDF-ului");
