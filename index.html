@@ -35,6 +35,12 @@
         .custom-option.active { background: #1e293b; border-color: rgba(59, 130, 246, 0.2); }
         .custom-option.active .opt-title { color: #3b82f6; }
 
+        /* Selector Grupa (4 Grupe) */
+        .group-selector-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .group-btn { background: #0f172a; border: 1px solid #1e293b; color: #94a3b8; padding: 10px 4px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 700; text-align: center; transition: all 0.2s ease; font-family: inherit; }
+        .group-btn:active { background: #1e293b; }
+        .group-btn.active { background: #1e293b; border-color: #3b82f6; color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.25); }
+
         /* Navigare Lună */
         .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         #lunaAn { font-weight: 700; letter-spacing: 0.5px; color: #f1f5f9; margin: 0; font-size: 1.25rem; text-transform: capitalize; }
@@ -202,6 +208,17 @@
         </div>
     </div>
 
+    <!-- Selector Grupa Lucru (4 Grupe) -->
+    <div class="custom-select-container">
+        <span class="profile-label">Grupa de lucru: Alege grupa în funcție de cum lucrezi</span>
+        <div class="group-selector-grid">
+            <button type="button" class="group-btn" id="btn-grupa-A" onclick="selecteazaGrupa('A')">Grupa A</button>
+            <button type="button" class="group-btn" id="btn-grupa-B" onclick="selecteazaGrupa('B')">Grupa B</button>
+            <button type="button" class="group-btn" id="btn-grupa-C" onclick="selecteazaGrupa('C')">Grupa C</button>
+            <button type="button" class="group-btn" id="btn-grupa-D" onclick="selecteazaGrupa('D')">Grupa D</button>
+        </div>
+    </div>
+
     <!-- Navigare Lună -->
     <div class="nav-bar">
         <button class="nav-btn" onclick="schimbaLuna(-1)">«</button>
@@ -313,8 +330,25 @@
         let profilCurent = localStorage.getItem('activeProfile') || 'p1';
         let zileCiclu = JSON.parse(localStorage.getItem('pattern_' + profilCurent)) || profiluri[profilCurent].implicit;
         
+        // Logica 4 Grupe de Lucru (A, B, C, D)
+        let grupaCurenta = localStorage.getItem('activeGroup') || 'A';
+        const decalajGrupe = { 'A': 0, 'B': 7, 'C': 14, 'D': 21 };
+
         let exceptiiZile = JSON.parse(localStorage.getItem('shift_exceptions_v2')) || {};
         let selectatDataStr = null;
+
+        function selecteazaGrupa(grupa) {
+            grupaCurenta = grupa;
+            localStorage.setItem('activeGroup', grupaCurenta);
+            updateGrupaUI();
+            genCalendar();
+        }
+
+        function updateGrupaUI() {
+            document.querySelectorAll('.group-btn').forEach(btn => btn.classList.remove('active'));
+            const btnActiv = document.getElementById('btn-grupa-' + grupaCurenta);
+            if (btnActiv) btnActiv.classList.add('active');
+        }
 
         function calculeazaZileLucratoareLuna(an, luna) {
             let zileTotal = new Date(an, luna + 1, 0).getDate();
@@ -365,7 +399,8 @@
                     notaText = exceptiiZile[dateStr].nota || "";
                 } else {
                     let diff = Math.floor((curr - startReferinta) / 86400000);
-                    let ciclu = ((diff % lenCiclu) + lenCiclu) % lenCiclu;
+                    let offsetGrupa = decalajGrupe[grupaCurenta] || 0;
+                    let ciclu = (((diff + offsetGrupa) % lenCiclu) + lenCiclu) % lenCiclu;
                     cod = zileCiclu[ciclu];
                 }
                 
@@ -518,7 +553,7 @@
             // Trecem în modul vizual PDF
             document.body.classList.add('generating-pdf');
             
-            // Pauză de 150ms pentru a-i oferi timp browserului să proceseze DOM-ul și layout-ul
+            // Pauză de 150ms pentru a-i ofer timp browserului să proceseze DOM-ul și layout-ul
             await new Promise(resolve => setTimeout(resolve, 150));
             
             const element = document.body;
@@ -579,6 +614,7 @@
         function schimbaLuna(v) { dataCurenta.setMonth(dataCurenta.getMonth() + v); genCalendar(); }
         
         updateCustomSelectUI();
+        updateGrupaUI();
         genCalendar();
     </script>
 </body>
